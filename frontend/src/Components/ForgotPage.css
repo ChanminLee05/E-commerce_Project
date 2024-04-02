@@ -1,0 +1,71 @@
+.forgot {
+    background: url("../Assets/forgotBG.jpg") no-repeat center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forgot-form {
+    background-color: white;
+    border-radius: 10px;
+    width: 30vw;
+    height: 30vw;
+}
+
+.forgot-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.forgot-header {
+    display: flex;
+    border-bottom: 1px lightgrey double;
+}
+
+.username-container {
+    width: 15vw;
+    display: flex;
+    justify-content: center;
+    border-right: 1px lightgrey double;
+}
+.username-container:hover {
+    background-color: #eae6e6;
+    border-top-left-radius: 10px;
+    cursor: pointer;
+}
+
+.password-container {
+    width: 15vw;
+    display: flex;
+    justify-content: center;
+}
+
+.password-container:hover {
+    background-color: #eae6e6;
+    border-top-right-radius: 10px;
+    cursor: pointer;
+}
+
+.forgot-title {
+    margin: 2vw 0 2vw 0;
+    cursor: pointer;
+}
+
+.forgot-info-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1vw;
+    margin-top: 2vw;
+}
+
+.email {
+    font-size: 1.2vw;
+    width: 15vw;
+}
+
+.register-footer {
+    cursor: default;
+}
