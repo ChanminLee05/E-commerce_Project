@@ -21,10 +21,6 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-
-    @Autowired
-    private EmailService emailService;
 
     @GetMapping("/user")
     public List<User> getAllUsers() {

@@ -4,6 +4,23 @@ import {useEffect, useState} from "react";
 
 const Item = ({ id, title, images, description, price }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleMouseEnter = () => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex(prevIndex =>
+                prevIndex < images.length - 1 ? prevIndex + 1 : 0
+            );
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(interval);
+        }, 3000);
+    };
+
+    const handleMouseLeave = () => {
+        setCurrentImageIndex(0);
+    };
 
     function toggleDescription() {
         setShowFullDescription(!showFullDescription);
@@ -12,7 +29,13 @@ const Item = ({ id, title, images, description, price }) => {
         <div className="card-container">
             <div className="card">
                 {images && (
-                    <img src={images[0]} className="card-img-top card-images" alt={title} />
+                    <img
+                        src={images[currentImageIndex]}
+                        className="card-img-top card-images"
+                        alt={title}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    />
                 )}
                 <div className="card-body desc">
                     <p className="brand-txt">NexusHub</p>
