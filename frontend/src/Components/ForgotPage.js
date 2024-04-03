@@ -84,10 +84,11 @@ const ForgotPage = () => {
             })
             .then((data) => {
                 console.log("Password reset successful");
-                toast.success(`Password reset successful for ${email}. New password: ${data}`, {
-                    position: "bottom-center",
+                toast.success(`Password reset successful for ${email}. New password is sent your email address`, {
+                    position: "top-center",
                     draggable: true,
-                    hideProgressBar: true
+                    hideProgressBar: true,
+                    toastId: "custom-toast-container"
                 });
                 setEmail('');
             })
