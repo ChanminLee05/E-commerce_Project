@@ -41,15 +41,12 @@ public class CartService {
 
     public CartItem addCartItem(AddCartRequest addCartRequest) {
         ProductResponse productResponse = productService.getProductByProductId(addCartRequest.getProductId());
-        Optional<User> userOptional = userService.getUserById(addCartRequest.getUserId());
 
-        if (productResponse != null && userOptional.isPresent()) {
-            User user = userOptional.get();
+        if (productResponse != null ) {
 
             CartItem cartItem = CartItem.builder()
                     .product(mapToProduct(productResponse))
                     .quantity(addCartRequest.getQuantity())
-                    .user(user)
                     .build();
 
             return cartItemRepository.save(cartItem);
@@ -76,5 +73,9 @@ public class CartService {
                 .categoryId(categoryResponse.getCategoryId())
                 .category_name(categoryResponse.getCategoryName())
                 .build();
+    }
+
+    public List<CartItem> getCartItemsForUser(String username) {
+        return cartItemRepository.findCartItemByUserUsername(username);
     }
 }

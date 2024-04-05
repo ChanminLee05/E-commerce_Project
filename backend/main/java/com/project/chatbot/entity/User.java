@@ -3,10 +3,12 @@ package com.project.chatbot.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,13 +29,23 @@ public class User implements UserDetails {
     private String phone_number;
     private LocalDate created;
 
-
     @OneToMany(mappedBy = "user")
     private Set<CartItem> cart;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        roles.forEach(role -> authorities.addAll(role.getRoleType().getAuthorities()));
+        System.out.println(authorities);
+        return authorities;
     }
 
     @Override
@@ -65,4 +77,16 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void addRole(Role role) {
+        getRoles().add(role);
+    }
+
+    public Set<Role> getRoles() {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+        return roles;
+    }
+
 }

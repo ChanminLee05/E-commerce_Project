@@ -3,7 +3,10 @@ package com.project.chatbot.service;
 import com.project.chatbot.dto.AuthenticationRequest;
 import com.project.chatbot.dto.AuthenticationResponse;
 import com.project.chatbot.dto.RegisterRequest;
+import com.project.chatbot.entity.Role;
+import com.project.chatbot.entity.RoleType;
 import com.project.chatbot.entity.User;
+import com.project.chatbot.repository.RoleRepository;
 import com.project.chatbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
@@ -19,6 +22,7 @@ import java.time.LocalDate;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -31,6 +35,18 @@ public class AuthenticationService {
                 .phone_number(registerRequest.getPhone_number())
                 .created(LocalDate.now())
                 .build();
+
+        Role role;
+        if (registerRequest.getEmail().equals("admin@nexushub.com")) {
+            role = roleRepository.findByRoleName(RoleType.ADMIN)
+                    .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
+        } else {
+            role = roleRepository.findByRoleName(RoleType.USER)
+                    .orElseThrow(() -> new RuntimeException("USER role not found"));
+        }
+
+        user.addRole(role);
+
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
