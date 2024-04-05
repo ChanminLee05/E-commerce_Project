@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     List<User> findAllUsers();
 
     @Query("SELECT u FROM User u WHERE u.user_id = :user_id")
-    List<User> findUserById(UUID user_id);
+    Optional<User> findUserById(UUID user_id);
 
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
