@@ -6,8 +6,21 @@ import ItemListPage from "./ItemListPage";
 
 const FashionPage = ({ handleSignIn, handleLogOut }) => {
     const apiUrls = [
-        "https://api.escuelajs.co/api/v1/products/?categoryId=1",
-        "https://api.escuelajs.co/api/v1/products/?categoryId=4"
+
+        "https://api.escuelajs.co/api/v1/products/?categoryId=1&offset=0&limit=5",
+        "https://dummyjson.com/products/category/mens-shirts",
+        "https://dummyjson.com/products/category/tops",
+        "https://dummyjson.com/products/category/womens-dresses",
+        "https://api.escuelajs.co/api/v1/products/?categoryId=4",
+        "https://dummyjson.com/products/category/womens-shoes",
+        "https://dummyjson.com/products/category/mens-shoes",
+        "https://dummyjson.com/products/category/mens-watches",
+        "https://dummyjson.com/products/category/womens-watches",
+        "https://dummyjson.com/products/category/womens-bags",
+        "https://dummyjson.com/products/category/womens-jewellery",
+        "https://dummyjson.com/products/category/sunglasses"
+
+
     ];
 
     return (
@@ -17,8 +30,8 @@ const FashionPage = ({ handleSignIn, handleLogOut }) => {
                 <div className="filter-section"></div>
                 <ItemListPage
                     apiUrl={apiUrls}
-                    initialItemCount={8}
-                    loadMoreIncrement={6}
+                    initialItemCount={12}
+                    loadMoreIncrement={70}
                 />
             </div>
         </>

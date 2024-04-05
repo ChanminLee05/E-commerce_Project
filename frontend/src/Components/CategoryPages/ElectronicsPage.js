@@ -3,7 +3,11 @@ import Header from "../Header";
 import ItemListPage from "./ItemListPage";
 
 const ElectronicsPage = ({ handleSignIn, handleLogOut }) => {
-    const electronicsApiUrl = ["https://api.escuelajs.co/api/v1/products/?categoryId=2"];
+    const electronicsApiUrl = [
+        "https://api.escuelajs.co/api/v1/products/?categoryId=2",
+        "https://dummyjson.com/products/category/smartphones",
+        "https://dummyjson.com/products/category/laptops"
+    ];
 
     return (
         <>
@@ -13,7 +17,7 @@ const ElectronicsPage = ({ handleSignIn, handleLogOut }) => {
                 <ItemListPage
                     apiUrl={electronicsApiUrl}
                     initialItemCount={8}
-                    loadMoreIncrement={2}
+                    loadMoreIncrement={20}
                 />
             </div>
         </>

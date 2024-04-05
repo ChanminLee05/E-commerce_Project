@@ -1,18 +1,15 @@
 package com.project.chatbot.controller;
 
 import com.project.chatbot.dto.DeleteUserRequest;
-import com.project.chatbot.entity.User;
-import com.project.chatbot.repository.UserRepository;
-import com.project.chatbot.service.EmailService;
+import com.project.chatbot.dto.UserResponse;
 import com.project.chatbot.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -21,20 +18,19 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-
-    @Autowired
-    private EmailService emailService;
 
     @GetMapping("/user")
-    public List<User> getAllUsers() {
-        return userService.getAllUser();
+    public List<UserResponse> getAllUsers() {
+
+        return userService.getAllUsers();
     }
 
-    @GetMapping("/user/find")
-    public ResponseEntity<String> getUserByEmail(@RequestParam String email) {
-        Optional<String> usernameOptional = userService.getUserByEmail(email);
-        return usernameOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/user/find/{email}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+        Optional<UserResponse> userResponseOptional = userService.getUserByEmail(email);
+        return userResponseOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/user/reset-password")
@@ -57,4 +53,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete user");
         }
     }
+
 }

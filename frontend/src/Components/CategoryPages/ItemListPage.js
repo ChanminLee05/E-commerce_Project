@@ -2,21 +2,42 @@ import React, {useEffect, useState} from 'react';
 import Item from "./Item";
 
 const ItemListPage = ({ apiUrl, initialItemCount, loadMoreIncrement }) => {
-    const [fashionItem, setFashionItem] = useState([]);
+    const [item, setItem] = useState([]);
     const [itemToShow, setItemToShow] = useState(initialItemCount);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const responses = await Promise.all(apiUrl.map(url => fetch(url)));
-                const data = await Promise.all(responses.map(response => response.json()));
-                const combinedData = data.flat();
+                const fetchPromises = apiUrl.map(url => fetch(url).then(response => response.json()));
+                const dataArray = await Promise.all(fetchPromises);
+
+                let idCounter = 1;
+                const combinedItems = [];
+
+                dataArray.forEach(data => {
+                    if (Array.isArray(data.products)) {
+                        // Process data from the dummyjson API
+                        data.products.forEach(item => {
+                            const newItem = { ...item, id: idCounter };
+                            combinedItems.push(newItem);
+                            idCounter++;
+                        });
+                    } else {
+                        // Process data from the platzi fake store API
+                        data.forEach(item => {
+                            const newItem = { ...item, id: idCounter };
+                            combinedItems.push(newItem);
+                            idCounter++;
+                        });
+                    }
+                });
 
                 setIsLoading(false);
-                setFashionItem(combinedData);
+                setItem(combinedItems);
+                console.log(combinedItems)
             } catch (error) {
-                console.error('Error fetching fashion items:', error);
+                console.error('Error fetching items:', error);
             }
         };
 
@@ -38,7 +59,7 @@ const ItemListPage = ({ apiUrl, initialItemCount, loadMoreIncrement }) => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 ) : (
-                    fashionItem.slice(0, itemToShow).map((item) => (
+                    item && item.length > 0 && item.slice(0, itemToShow).map((item) => (
                         <Item
                             key={item.id}
                             id={item.id}

@@ -28,8 +28,8 @@ public class User implements UserDetails {
     private LocalDate created;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Product> products;
+    @OneToMany(mappedBy = "user")
+    private Set<CartItem> cart;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
