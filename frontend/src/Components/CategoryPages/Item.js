@@ -1,10 +1,12 @@
 import './Item.css';
 import {useEffect, useState} from "react";
+import {toast} from "react-toastify";
 
 
 const Item = ({ id, title, images, description, price }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isAddingToCart, setIsAddingToCart] = useState(false);
 
     const handleMouseEnter = () => {
         const interval = setInterval(() => {
@@ -25,6 +27,47 @@ const Item = ({ id, title, images, description, price }) => {
     function toggleDescription() {
         setShowFullDescription(!showFullDescription);
     }
+
+    function handleAddToCart() {
+        if (isAddingToCart) return; // Prevent multiple clicks
+
+        setIsAddingToCart(true);
+
+        const orderDate = new Date().toLocaleDateString();
+
+        const data = {
+            product_id: id,
+            product_name: title,
+            order_date: orderDate,
+            price: price
+        };
+
+        fetch('chatbot/product', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add item to cart');
+                } else {
+                    return response.json();
+                }
+            })
+            .then(() => {
+                toast.success('Item added to cart successfully');
+            })
+            .catch(error => {
+                console.error('Error adding item to cart:', error);
+                toast.error('Failed to add item to cart');
+            })
+            .finally(() => {
+                setIsAddingToCart(false);
+            })
+    }
+
     return (
         <div className="card-container">
             <div className="card">
@@ -49,7 +92,11 @@ const Item = ({ id, title, images, description, price }) => {
                     </p>
                     <h4 className="price-txt">${price}</h4>
                     <div className="add-to-cart-container">
-                        <button className="add-to-cart"><i className="bi bi-cart3 cart-icon" id={id}></i></button>
+                        <button
+                            className="add-to-cart"
+                            onClick={handleAddToCart}>
+                            <i className="bi bi-cart3 cart-icon" id={id}></i>
+                        </button>
                     </div>
                 </div>
             </div>

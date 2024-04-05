@@ -35,8 +35,14 @@ public class SecurityConfig {
                         .requestMatchers("/chatbot").permitAll()
                         .requestMatchers("/chatbot/**").permitAll()
                         .requestMatchers("/chatbot/user").permitAll()
-                        .requestMatchers("/chatbot/user/**").permitAll()
+                        .requestMatchers("/chatbot/user/find").permitAll()
                         .requestMatchers("/user/reset-password").permitAll()
+                        .requestMatchers("/product").permitAll()
+                        .requestMatchers("/product/**").permitAll()
+                        .requestMatchers("/category").permitAll()
+                        .requestMatchers("/category/**").permitAll()
+                        .requestMatchers("/chatbot/cart").permitAll()
+                        .requestMatchers("/chatbot/cart/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

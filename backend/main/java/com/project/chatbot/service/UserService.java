@@ -1,6 +1,6 @@
 package com.project.chatbot.service;
 
-import com.project.chatbot.dto.DeleteUserRequest;
+import com.project.chatbot.dto.UserResponse;
 import com.project.chatbot.entity.User;
 import com.project.chatbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +22,30 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
-    public List<User> getAllUser() {
-        return userRepository.findAllUsers();
+    public List<UserResponse> getAllUsers() {
+        // Retrieve all users
+        List<User> users = userRepository.findAll();
+
+        // Convert users to UserResponse DTOs
+        return users.stream()
+                .map(this::mapToUserResponse)
+                .collect(Collectors.toList());
     }
 
-    public Optional<String> getUserByEmail(String email) {
-        if (userRepository.existsByEmail(email)) {
-            return userRepository.findByEmail(email)
-                    .map(User::getUsername);
-        }
-        return Optional.empty();
+    private UserResponse mapToUserResponse(User user) {
+        return UserResponse.builder()
+                .user_id(user.getUser_id())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .phone_number(user.getPhone_number())
+                .created(user.getCreated())
+                .build();
+    }
+
+    public Optional<UserResponse> getUserByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        return userOptional.map(this::mapToUserResponse);
     }
 
     public boolean deleteUserByEmailAndPassword(String email, String password) {
@@ -49,11 +64,11 @@ public class UserService {
         }
     }
 
-    public List<User> getUserById(UUID userId) {
+    public Optional<User> getUserById(UUID userId) {
         if (userId != null) {
             return userRepository.findUserById(userId);
         }
-        return null;
+        return Optional.empty();
     }
 
     public Optional<String> resetUserPasswordByEmail(String email) {

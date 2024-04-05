@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,13 +18,21 @@ public class Product {
 
     @Id
     @GeneratedValue
-    private int product_id;
+    @Column(name = "product_id")
+    private int productId;
+
     private String product_name;
-    private Date orderDate;
+    private String description;
+    private String image;
+    private LocalDate orderDate;
     private double price;
-    private int quantity;
+    private int stock_quantity;
+
+    @OneToMany(mappedBy = "product")
+    private Set<CartItem> cartItem;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "category_id")
+    private Category category;
+
 }
