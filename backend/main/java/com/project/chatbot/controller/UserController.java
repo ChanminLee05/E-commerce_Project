@@ -1,13 +1,14 @@
 package com.project.chatbot.controller;
 
 import com.project.chatbot.dto.DeleteUserRequest;
+import com.project.chatbot.dto.AdminResponse;
 import com.project.chatbot.dto.UserResponse;
 import com.project.chatbot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -15,18 +16,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/chatbot")
 @CrossOrigin(origins = "http://localhost:3000")
+@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user")
-    public List<UserResponse> getAllUsers() {
-
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/user/find/{email}")
-    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+    @GetMapping("/user/find")
+    @PreAuthorize("hasAnyAuthority('admin:read', 'user:read')")
+    public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         Optional<UserResponse> userResponseOptional = userService.getUserByEmail(email);
         return userResponseOptional
                 .map(ResponseEntity::ok)
@@ -34,6 +31,7 @@ public class UserController {
     }
 
     @PutMapping("/user/reset-password")
+    @PreAuthorize("hasAnyAuthority('admin:update', 'user:update')")
     public ResponseEntity<String> resetPassword(@RequestParam String email) {
         Optional<String> newPasswordOptional = userService.resetUserPasswordByEmail(email);
         if (newPasswordOptional.isPresent()) {
@@ -45,6 +43,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/delete")
+    @PreAuthorize("hasAnyAuthority('admin:delete', 'user:delete')")
     public ResponseEntity<String> deleteUser(@RequestBody DeleteUserRequest deleteUserRequest) {
         boolean deleted = userService.deleteUserByEmailAndPassword(deleteUserRequest.getEmail(), deleteUserRequest.getPassword());
         if (deleted) {

@@ -19,4 +19,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     @Query("SELECT COUNT(ci) > 0 FROM CartItem ci WHERE ci.cartId = :cartId")
     boolean existsByCartItemId(@Param("cartId") int cartId);
 
+    List<CartItem> findCartItemByUserUsername(String username);
 }

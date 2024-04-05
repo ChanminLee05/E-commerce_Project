@@ -1,16 +1,16 @@
 package com.project.chatbot.service;
 
+import com.project.chatbot.dto.AdminResponse;
 import com.project.chatbot.dto.UserResponse;
+import com.project.chatbot.entity.Role;
+import com.project.chatbot.entity.RoleType;
 import com.project.chatbot.entity.User;
 import com.project.chatbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -22,24 +22,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
-    public List<UserResponse> getAllUsers() {
-        // Retrieve all users
-        List<User> users = userRepository.findAll();
-
-        // Convert users to UserResponse DTOs
-        return users.stream()
-                .map(this::mapToUserResponse)
-                .collect(Collectors.toList());
-    }
-
     private UserResponse mapToUserResponse(User user) {
+        Set<RoleType> roleTypes = user.getRoles().stream()
+                .map(Role::getRoleType)
+                .collect(Collectors.toSet());
+
         return UserResponse.builder()
-                .user_id(user.getUser_id())
                 .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .phone_number(user.getPhone_number())
-                .created(user.getCreated())
                 .build();
     }
 
