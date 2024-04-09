@@ -1,0 +1,18 @@
+.add-product-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.add-product-form {
+    margin: 5vw;
+}
+
+.category-select {
+    width: 10vw;
+    height: 2vw
+}
+
+.input-box {
+    width: 100%;
+}
