@@ -37,12 +37,12 @@ const Item = ({ id, title, images, description, price }) => {
 
         const data = {
             product_id: id,
-            product_name: title,
+            productName: title,
             order_date: orderDate,
             price: price
         };
 
-        fetch('chatbot/product', {
+        fetch('nexusHub/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

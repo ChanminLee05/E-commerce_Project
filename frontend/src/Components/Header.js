@@ -23,7 +23,7 @@ export default function Header() {
         e.preventDefault();
         const user = {username, password}
         console.log(user);
-        fetch("http://localhost:8080/chatbot/authenticate", {
+        fetch("http://localhost:8080/nexusHub/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)

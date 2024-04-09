@@ -9,6 +9,11 @@ import FashionPage from "./Components/CategoryPages/FashionPage";
 import ElectronicsPage from "./Components/CategoryPages/ElectronicsPage";
 import MiscellaneousPage from "./Components/CategoryPages/MiscellaneousPage";
 import HomesPage from "./Components/CategoryPages/HomesPage";
+import AdminPage from "./Components/AdminPage/AdminPage";
+import AddProductPage from "./Components/CategoryPages/AddProductPage";
+import Item from "./Components/CategoryPages/Item";
+import ProductItem from "./Components/AdminPage/ProductItem";
+import AdminLoginPage from "./Components/AdminPage/AdminLoginPage";
 
 function App() {
   return (
@@ -24,6 +29,10 @@ function App() {
             <Route path="/electronics" element={<ElectronicsPage/>} />
             <Route path="/miscellaneous" element={<MiscellaneousPage/>} />
             <Route path="/homes" element={<HomesPage/>} />
+            <Route path="/admin" element={<AdminPage/>} />
+            <Route path="/add-product" element={<AddProductPage/>} />
+            <Route path="/item" element={<ProductItem/>} />
+            <Route path="/admin/login" element={<AdminLoginPage/>} />
 
         </Routes>
     </Router>

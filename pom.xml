@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.project</groupId>
-    <artifactId>chatbot</artifactId>
+    <artifactId>nexusHub_frontend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>chatbot</name>
     <description>chatbot</description>

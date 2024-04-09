@@ -44,7 +44,7 @@ const RegisterPage = () => {
 
         const registerUser = {username, password, email, phone_number};
         console.log(registerUser);
-        fetch("http://localhost:8080/chatbot/register", {
+        fetch("http://localhost:8080/nexusHub/register", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(registerUser)
