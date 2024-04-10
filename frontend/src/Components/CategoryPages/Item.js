@@ -33,12 +33,9 @@ const Item = ({ id, title, images, description, price }) => {
 
         setIsAddingToCart(true);
 
-        const orderDate = new Date().toLocaleDateString();
-
         const data = {
             product_id: id,
             productName: title,
-            order_date: orderDate,
             price: price
         };
 

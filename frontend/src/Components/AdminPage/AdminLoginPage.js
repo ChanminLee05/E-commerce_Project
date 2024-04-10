@@ -22,7 +22,7 @@ const AdminLoginPage = () => {
                 response.json().then(data => {
                     localStorage.setItem('token', data.token);
                     setIsLoggedIn(true);
-                    navigate('/admin');
+                    navigate('/admin/product-control');
                     toast.success('Login Successful', {
                         position: "top-center",
                         draggable: true,

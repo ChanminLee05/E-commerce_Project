@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {toast, ToastContainer} from "react-toastify";
-import "../AdminPage/AddProductPage.css";
+import "./AddProductPage.css";
 
 const AddProductPage = () => {
     const categories = [

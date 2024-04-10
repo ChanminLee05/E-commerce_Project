@@ -2,18 +2,17 @@ import './App.css';
 import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import MainPage from "./Components/MainPage";
 import TechSupport from "./Components/TechSupport";
-import Cart from "./Components/Cart";
 import RegisterPage from "./Components/RegisterPage";
 import ForgotPage from "./Components/ForgotPage";
 import FashionPage from "./Components/CategoryPages/FashionPage";
 import ElectronicsPage from "./Components/CategoryPages/ElectronicsPage";
 import MiscellaneousPage from "./Components/CategoryPages/MiscellaneousPage";
 import HomesPage from "./Components/CategoryPages/HomesPage";
-import AdminPage from "./Components/AdminPage/AdminPage";
-import AddProductPage from "./Components/CategoryPages/AddProductPage";
-import Item from "./Components/CategoryPages/Item";
-import ProductItem from "./Components/AdminPage/ProductItem";
+import ProductControlPage from "./Components/AdminPage/ProductControlPage";
+import AddProductPage from "./Components/AdminPage/AddProductPage";
 import AdminLoginPage from "./Components/AdminPage/AdminLoginPage";
+import UserControlPage from "./Components/AdminPage/UserControlPage";
+import ShoppingCart from "./Components/CartPage/ShoppingCart";
 
 function App() {
   return (
@@ -22,17 +21,17 @@ function App() {
             <Route index element={<MainPage/>} />
             <Route path="/main" element={<MainPage/>} />
             <Route path="/tech-support" element={<TechSupport/>} />
-            <Route path="/cart" element={<Cart/>} />
+            <Route path="/cart" element={<ShoppingCart/>} />
             <Route path="/register" element={<RegisterPage/>} />
             <Route path="/find" element={<ForgotPage/>} />
             <Route path="/fashion" element={<FashionPage/>} />
             <Route path="/electronics" element={<ElectronicsPage/>} />
             <Route path="/miscellaneous" element={<MiscellaneousPage/>} />
             <Route path="/homes" element={<HomesPage/>} />
-            <Route path="/admin" element={<AdminPage/>} />
-            <Route path="/add-product" element={<AddProductPage/>} />
-            <Route path="/item" element={<ProductItem/>} />
+            <Route path="/admin/product-control" element={<ProductControlPage/>} />
+            <Route path="/admin/add-product" element={<AddProductPage/>} />
             <Route path="/admin/login" element={<AdminLoginPage/>} />
+            <Route path="/admin/user-control" element={<UserControlPage/>} />
 
         </Routes>
     </Router>

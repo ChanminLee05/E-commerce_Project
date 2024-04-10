@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import Header from "./Header";
-import "./Cart.css";
-import ExampleImg from "../Assets/ElectronicImg/camera.jpg";
-export default function Cart() {
+import Header from "../Header";
+import "./ShoppingCart.css";
+import ExampleImg from "../../Assets/ElectronicImg/camera.jpg";
+export default function ShoppingCart() {
     const [quantity, setQuantity] = useState(1);
 
     function handleQuantityChange(e) {
