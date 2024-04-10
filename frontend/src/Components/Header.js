@@ -150,7 +150,7 @@ export default function Header() {
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#"><i className="bi bi-bag-check bag-img"></i></a>
+                        <Link to="/cart"><i className="bi bi-bag-check bag-img"></i></Link>
                     </li>
                 </ul>
             </div>
