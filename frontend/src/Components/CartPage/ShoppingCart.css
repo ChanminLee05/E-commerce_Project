@@ -32,7 +32,7 @@
     height: 10vw;
 }
 
-.card {
+.shopping-card {
     display: flex;
     align-items: center;
     flex-direction: row;

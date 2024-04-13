@@ -19,7 +19,7 @@ export default function ShoppingCart() {
                     </div>
                     <ul className="product-list">
                         <li className="product">
-                            <div className="card">
+                            <div className="card shopping-card">
                                 <img src={ExampleImg} className="product-img" alt="product image"/>
                                 <div className="card-body">
                                     <h5 className="card-title">Product Name</h5>
