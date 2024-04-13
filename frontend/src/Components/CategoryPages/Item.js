@@ -3,10 +3,11 @@ import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 
 
-const Item = ({ id, title, images, description, price }) => {
+const Item = ({ cartId, productId, title, images, description, price }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
+    const [saveToWishlist, setSaveToWishlist] = useState(false);
 
     const handleMouseEnter = () => {
         const interval = setInterval(() => {
@@ -33,16 +34,15 @@ const Item = ({ id, title, images, description, price }) => {
 
         setIsAddingToCart(true);
 
-        const orderDate = new Date().toLocaleDateString();
-
         const data = {
-            product_id: id,
-            product_name: title,
-            order_date: orderDate,
-            price: price
+            cart_id: cartId,
+            product_id: productId,
+            productName: title,
+            price: price,
+            images: images
         };
 
-        fetch('chatbot/product', {
+        fetch('nexusHub/cart-item/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,6 +66,11 @@ const Item = ({ id, title, images, description, price }) => {
             .finally(() => {
                 setIsAddingToCart(false);
             })
+    }
+
+    function handleSaveToWishlist() {
+        setSaveToWishlist(true);
+        // Logic to save to wishlist
     }
 
     return (
@@ -93,9 +98,14 @@ const Item = ({ id, title, images, description, price }) => {
                     <h4 className="price-txt">${price}</h4>
                     <div className="add-to-cart-container">
                         <button
+                            className="add-to-wishlist"
+                            onClick={handleSaveToWishlist}>
+                            <i className="bi bi-heart-fill heart-icon" id={productId}></i>
+                        </button>
+                        <button
                             className="add-to-cart"
                             onClick={handleAddToCart}>
-                            <i className="bi bi-cart3 cart-icon" id={id}></i>
+                            <i className="bi bi-cart3 cart-icon" id={productId}></i>
                         </button>
                     </div>
                 </div>

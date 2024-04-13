@@ -7,7 +7,6 @@ import ItemListPage from "./ItemListPage";
 const FashionPage = ({ handleSignIn, handleLogOut }) => {
     const apiUrls = [
 
-        "https://api.escuelajs.co/api/v1/products/?categoryId=1&offset=0&limit=5",
         "https://dummyjson.com/products/category/mens-shirts",
         "https://dummyjson.com/products/category/tops",
         "https://dummyjson.com/products/category/womens-dresses",

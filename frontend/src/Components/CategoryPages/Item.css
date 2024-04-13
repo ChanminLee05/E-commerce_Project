@@ -71,22 +71,41 @@
 /*Cart*/
 .add-to-cart-container {
     display: flex;
-    margin: 0.5vw 0 0.5vw 11vw;
+    align-items: center;
+    margin: 0.5vw 0 0.5vw 3vw;
     left: 11vw;
-    width: 5vw;
+    width: 10vw;
     height: 3vw;
     background-color: transparent;
 }
 
 .add-to-cart {
     position: absolute;
-    bottom: 1.3vw;
-    width: 4vw;
-    height: 3vw;
+    right: 0.8vw;
+    bottom: 1vw;
     line-height: 40px;
     border: none;
     background-color: transparent;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-to-wishlist {
+    position: absolute;
+    left: 10vw;
+    bottom: 1vw;
+    line-height: 40px;
+    border: none;
+    background-color: transparent;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.heart-icon {
+    color: #ff0000;
+    font-size: 1.2vw;
+}
+
+.heart-icon:hover {
+    color: #b40404;
 }
 
 .cart-icon {

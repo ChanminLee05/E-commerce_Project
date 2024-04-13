@@ -17,13 +17,24 @@ export default function Header() {
         // Check if user is logged in by checking localStorage
         const token = localStorage.getItem('token'); // Assuming you store token upon successful login
         setIsLoggedIn(!!token);
+
+        const handleBeforeUnload = (event) => {
+            // Clear token from localStorage upon leaving the page or closing the browser window
+            localStorage.removeItem('token');
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     function handleSignIn(e) {
         e.preventDefault();
         const user = {username, password}
         console.log(user);
-        fetch("http://localhost:8080/chatbot/authenticate", {
+        fetch("http://localhost:8080/nexusHub/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)
@@ -150,7 +161,7 @@ export default function Header() {
                         </ul>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="#"><i className="bi bi-bag-check bag-img"></i></a>
+                        <Link to="/cart"><i className="bi bi-bag-check bag-img"></i></Link>
                     </li>
                 </ul>
             </div>
