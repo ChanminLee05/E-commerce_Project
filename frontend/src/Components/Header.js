@@ -17,6 +17,17 @@ export default function Header() {
         // Check if user is logged in by checking localStorage
         const token = localStorage.getItem('token'); // Assuming you store token upon successful login
         setIsLoggedIn(!!token);
+
+        const handleBeforeUnload = (event) => {
+            // Clear token from localStorage upon leaving the page or closing the browser window
+            localStorage.removeItem('token');
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     function handleSignIn(e) {
