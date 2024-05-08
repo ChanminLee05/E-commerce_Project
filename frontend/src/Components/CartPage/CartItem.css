@@ -1,0 +1,75 @@
+.cart-item-container {
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 16vw;
+    cursor: default;
+}
+
+.cart-item {
+    padding: 1vw 2vw;
+    display: flex;
+}
+
+.cart-item-card-images {
+    width: 15vw;
+    height: 13vw;
+    border-radius: 10px;
+}
+
+.cart-item-desc {
+    margin-left: 2vw;
+}
+
+.cart-item-brand-txt {
+    color: #606063;
+    font-size: 1.3vw;
+    margin-bottom: 1vw;
+    font-family: "Freeman", sans-serif;
+}
+
+.cart-item-productName {
+    font-size: 1.5vw;
+    font-family: "Bebas Neue", sans-serif;
+    margin: 0 1vw 0 0;
+}
+
+.cart-item-price-txt {
+    color: #088178;
+    font-size: 1.5vw;
+    margin-top: 2vw;
+}
+
+/*Quantity Section*/
+.quantity-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #c4c2c2;
+    height: 2.2vw;
+    width: 8vw;
+    margin: 1.5vw 1vw 0 0 ;
+    cursor: pointer;
+}
+
+.quantity-txt {
+    font-size: 1vw;
+    margin: 0.8vw;
+}
+
+.select-quantity {
+    width: 4vw;
+    height: 2vw;
+    background-color: #c4c2c2;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn {
+    width: 5vw;
+    height: 2vw;
+    border-radius: 10px;
+    font-size: 1vw;
+    background-color: #c4c2c2;
+}

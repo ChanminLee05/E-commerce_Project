@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './Header.css';
 import * as bootstrap from 'bootstrap';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -43,6 +43,8 @@ export default function Header() {
                 console.log('Login Successful');
                 response.json().then(data => {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
+                    console.log("UserID", data.userId);
                     setIsLoggedIn(true);
                     // Save username to localStorage if "Remember Me" is checked
                     if (rememberMe) {
@@ -86,16 +88,20 @@ export default function Header() {
     }
 
     function handleLogOut() {
-        // Clear token from localStorage upon logout
+
         localStorage.removeItem('token');
+        localStorage.removeItem('userId');
 
         setIsLoggedIn(false);
+
+        window.location.href = '/main';
+
         toast.success("Logout Successful", {
-            position: "top-center",
-            draggable: true,
-            hideProgressBar: true
+                position: "top-center",
+                draggable: true,
+                hideProgressBar: true
             }
-            )
+        )
     }
 
 

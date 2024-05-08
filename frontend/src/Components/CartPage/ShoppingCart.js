@@ -1,12 +1,40 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../Header";
 import "./ShoppingCart.css";
-import ExampleImg from "../../Assets/ElectronicImg/camera.jpg";
-export default function ShoppingCart() {
-    const [quantity, setQuantity] = useState(1);
+import CartItem from "./CartItem";
 
-    function handleQuantityChange(e) {
-        setQuantity(parseInt(e.target.value));
+export default function ShoppingCart() {
+    const [cartItems, setCartItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [cartId, setCartId] = useState(null);
+
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                try {
+                    const response = await fetch(`http://localhost:8080/nexusHub/cart/${userId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log("data", data)
+                        setCartItems(data.cartItemList);
+                        setCartId(data.cartId)
+                        setIsLoading(false);
+                    } else {
+                        console.error("Failed to fetch cart items");
+                    }
+                } catch (error) {
+                    console.error("Error fetching cart items:", error);
+                }
+            }
+
+        };
+
+        fetchCartItems();
+    },[]);
+
+    const handleDeleteItem = (deletedItemId) => {
+        setCartItems(prevCartItems => prevCartItems.filter(item => item.cartItemId !== deletedItemId));
     }
 
     return(
@@ -19,22 +47,28 @@ export default function ShoppingCart() {
                     </div>
                     <ul className="product-list">
                         <li className="product">
-                            <div className="card shopping-card">
-                                <img src={ExampleImg} className="product-img" alt="product image"/>
-                                <div className="card-body">
-                                    <h5 className="card-title">Product Name</h5>
-                                    <div className="quantity-container">
-                                        <span className="quantity-txt">Qty:</span>
-                                        <select className="form-select" value={quantity} onChange={handleQuantityChange}>
-                                            {[1,2,3,4,5].map((value) => (
-                                                <option key={value} value={value}>
-                                                    {value}
-                                                </option>
-                                            ))}
-                                        </select>
+                            <div className="shopping-card">
+                                {isLoading ? (
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
                                     </div>
-                                    <button className="delete-btn">Delete</button>
-                                </div>
+                                ) : cartItems.length === 0 ? (
+                                    <p>There are no items in your cart.</p>
+                                ) :(
+                                    cartItems && cartItems.map((cartItem, index) => (
+                                        <CartItem
+                                            key={index}
+                                            cartId={cartId}
+                                            cartItemId={cartItem.cartItemId}
+                                            images={cartItem.images}
+                                            productName={cartItem.productName}
+                                            brand={cartItem.brand}
+                                            price={cartItem.price}
+                                            quantity={cartItem.quantity}
+                                            onDelete={handleDeleteItem}
+                                        />
+                                    ))
+                                )}
                             </div>
                         </li>
                     </ul>
