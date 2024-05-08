@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 
 
-const Item = ({ cartId, productId, title, images, description, price }) => {
+const Item = ({ productId, brand, productName, images, description, price }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -30,30 +30,33 @@ const Item = ({ cartId, productId, title, images, description, price }) => {
     }
 
     function handleAddToCart() {
-        if (isAddingToCart) return; // Prevent multiple clicks
+        if (isAddingToCart) return;
 
         setIsAddingToCart(true);
 
         const data = {
-            cart_id: cartId,
-            product_id: productId,
-            productName: title,
-            price: price,
-            images: images
+            productId: productId,
+            quantity: 1
         };
 
-        fetch('nexusHub/cart-item/add', {
+        const authToken = localStorage.getItem('token');
+
+        fetch('http://localhost:8080/nexusHub/cart-item/add', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `${authToken}`
             },
             body: JSON.stringify(data)
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to add item to cart');
+                if (response.ok) {
+                    const addToCart = window.confirm("Do you want to add this item to your cart?")
+                    if (addToCart) {
+                        setIsAddingToCart(true);
+                    }
                 } else {
-                    return response.json();
+                    throw new Error('Failed to add item to cart');
                 }
             })
             .then(() => {
@@ -69,9 +72,36 @@ const Item = ({ cartId, productId, title, images, description, price }) => {
     }
 
     function handleSaveToWishlist() {
-        setSaveToWishlist(true);
-        // Logic to save to wishlist
+        const wishlistItems = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+        if (saveToWishlist) {
+            const index = wishlistItems.indexOf(productId);
+            if (index !== -1) {
+                wishlistItems.splice(index, 1);
+            }
+
+            const removeFromWishList = window.confirm("Do you want to remove this item from your wishlist?");
+            if (removeFromWishList) {
+                localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+                setSaveToWishlist(false);
+            }
+        } else {
+            const addToWishList = window.confirm("Do you want to add this item to your wishlist?");
+            if (addToWishList) {
+                wishlistItems.push(productId);
+                localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+                setSaveToWishlist(true);
+            }
+        }
     }
+
+    useEffect(() => {
+        const savedWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        if (savedWishlist.includes(productId)) {
+            setSaveToWishlist(true);
+        }
+    }, [productId]);
+
 
     return (
         <div className="card-container">
@@ -80,14 +110,14 @@ const Item = ({ cartId, productId, title, images, description, price }) => {
                     <img
                         src={images[currentImageIndex]}
                         className="card-img-top card-images"
-                        alt={title}
+                        alt={productName}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     />
                 )}
                 <div className="card-body desc">
-                    <p className="brand-txt">NexusHub</p>
-                    <h5 className="card-title">{title}</h5>
+                    <p className="brand-txt">{brand}</p>
+                    <h5 className="card-title">{productName}</h5>
                     <p className="product-desc">
                         {showFullDescription ? description : description.slice(0, 100)}
                         {description.length > 100 && (
@@ -100,7 +130,7 @@ const Item = ({ cartId, productId, title, images, description, price }) => {
                         <button
                             className="add-to-wishlist"
                             onClick={handleSaveToWishlist}>
-                            <i className="bi bi-heart-fill heart-icon" id={productId}></i>
+                            <i className={`bi ${saveToWishlist ? 'bi-heart-fill' : 'bi-heart'} heart-icon`} id={productId}></i>
                         </button>
                         <button
                             className="add-to-cart"

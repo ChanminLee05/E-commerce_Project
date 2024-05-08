@@ -1,48 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import Item from "./Item";
 
-const ItemListPage = ({ apiUrl, initialItemCount, loadMoreIncrement }) => {
-    const [item, setItem] = useState([]);
+const ItemListPage = ({ categoryId, initialItemCount, loadMoreIncrement }) => {
+    const [items, setItems] = useState([]);
     const [itemToShow, setItemToShow] = useState(initialItemCount);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const fetchPromises = apiUrl.map(url => fetch(url).then(response => response.json()));
-                const dataArray = await Promise.all(fetchPromises);
-
-                let idCounter = 1;
-                const combinedItems = [];
-
-                dataArray.forEach(data => {
-                    if (Array.isArray(data.products)) {
-                        // Process data from the dummyjson API
-                        data.products.forEach(item => {
-                            const newItem = { ...item, id: idCounter };
-                            combinedItems.push(newItem);
-                            idCounter++;
-                        });
-                    } else {
-                        // Process data from the platzi fake store API
-                        data.forEach(item => {
-                            const newItem = { ...item, id: idCounter };
-                            combinedItems.push(newItem);
-                            idCounter++;
-                        });
-                    }
-                });
-
+                const response = await fetch(`http://localhost:8080/nexusHub/product/category/${categoryId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch items");
+                }
+                const data = await response.json();
+                console.log(data);
+                setItems(data);
                 setIsLoading(false);
-                setItem(combinedItems);
-                console.log(combinedItems)
             } catch (error) {
                 console.error('Error fetching items:', error);
             }
         };
 
         fetchItems();
-    }, [apiUrl]);
+    }, [categoryId]);
 
     function handleLoadMoreClick() {
         setItemToShow(prev => prev + loadMoreIncrement);
@@ -59,12 +40,13 @@ const ItemListPage = ({ apiUrl, initialItemCount, loadMoreIncrement }) => {
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 ) : (
-                    item && item.length > 0 && item.slice(0, itemToShow).map((item) => (
+                    items.slice(0, itemToShow).map((item, index) => (
                         <Item
-                            key={item.id}
-                            id={item.id}
+                            key={index}
+                            productId={item.productId}
+                            productName={item.productName}
+                            brand={item.brand}
                             images={item.images}
-                            title={item.title}
                             price={item.price}
                             description={item.description}
                         />
