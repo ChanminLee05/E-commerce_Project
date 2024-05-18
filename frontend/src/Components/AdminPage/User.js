@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {toast, ToastContainer} from "react-toastify";
 import bcrypt from "bcryptjs";
+import "./User.css";
 
 const User = ({user_id, username, password, email, phone_number, roles, created}) => {
     const [isAccordionOpened, setIsAccordionOpened] = useState(false);
@@ -16,16 +17,6 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
     const toggleAccordions = () => {
         setIsAccordionOpened(!isAccordionOpened);
     };
-
-    // const comparePasswords = async (password, hashedPassword) => {
-    //     try {
-    //         const match = await bcrypt.compare(password, hashedPassword);
-    //         return match;
-    //     } catch (error) {
-    //         console.error('Error comparing passwords:', error);
-    //         return false;
-    //     }
-    // };
 
     function userChange(e) {
         const { name, value } = e.target;
@@ -126,15 +117,15 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
     return (
         <>
             <tr>
-                <td className="tr-col">{user_id}</td>
-                <td className="tr-col">{username}</td>
-                <td className="tr-col">{password}</td>
-                <td className="tr-col">{email}</td>
-                <td className="tr-col">{phone_number}</td>
-                <td className="tr-col">{roles}</td>
-                <td className="tr-col">{created}</td>
-                <td className="tr-col"><button className="btn btn-primary" onClick={toggleAccordions}>UPDATE</button></td>
-                <td className="tr-col"><button className="btn btn-danger" onClick={deleteUser}>DELETE</button></td>
+                <td className="tr-col user-info-txt">{user_id}</td>
+                <td className="tr-col user-info-txt">{username}</td>
+                <td className="tr-col user-info-txt user-password">{password}</td>
+                <td className="tr-col user-info-txt">{email}</td>
+                <td className="tr-col user-info-txt">{phone_number}</td>
+                <td className="tr-col user-info-txt">{roles}</td>
+                <td className="tr-col user-info-txt">{created}</td>
+                <td className="tr-col user-info-txt"><button className="btn btn-primary user-update-btn" onClick={toggleAccordions}>UPDATE</button></td>
+                <td className="tr-col user-info-txt"><button className="btn btn-danger product-delete-btn" onClick={deleteUser}>DELETE</button></td>
             </tr>
             {isAccordionOpened && (
                 <tr>

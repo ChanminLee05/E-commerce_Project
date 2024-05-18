@@ -2,17 +2,30 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    background-color: #b5e1a3;
+    height: 100vh;
 }
 
 .add-product-form {
-    margin: 5vw;
+    margin: 3vw 0;
+    background-color: white;
+    padding: 1vw 2.5vw;
+    border-radius: 10px;
+}
+
+.add-product-title {
+    margin-bottom: 1vw;
 }
 
 .category-select {
-    width: 10vw;
-    height: 2vw
+    width: 12vw;
+    height: 3vw
 }
 
 .input-box {
     width: 100%;
+}
+
+.add-product-desc {
+    height: 5vw;
 }

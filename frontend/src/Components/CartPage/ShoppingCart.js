@@ -2,11 +2,14 @@ import React, {useEffect, useState} from "react";
 import Header from "../Header";
 import "./ShoppingCart.css";
 import CartItem from "./CartItem";
+import cartItem from "./CartItem";
+import {toast} from "react-toastify";
 
 export default function ShoppingCart() {
     const [cartItems, setCartItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cartId, setCartId] = useState(null);
+    const [subTotal, setSubTotal] = useState(0);
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -34,14 +37,37 @@ export default function ShoppingCart() {
     },[]);
 
     const handleDeleteItem = (deletedItemId) => {
+        toast.success("Item deleted from your cart", {
+                position: "top-center",
+                draggable: true,
+                hideProgressBar: true
+            }
+        )
         setCartItems(prevCartItems => prevCartItems.filter(item => item.cartItemId !== deletedItemId));
     }
+
+    const handleQuantityChange = (cartItemId, newQuantity) => {
+        // Update the quantity of the item in the cart
+        setCartItems(prevCartItems =>
+            prevCartItems.map(item =>
+                item.cartItemId === cartItemId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+    };
+
+    useEffect(() => {
+        // Recalculate subtotal whenever cartItems change
+        const newSubTotal = cartItems.reduce(
+            (total, cartItem) => total + cartItem.price * cartItem.quantity, 0
+        );
+        setSubTotal(newSubTotal);
+    }, [cartItems]);
 
     return(
         <>
             <Header/>
-            <div className="cart">
-                <div className="cart-container">
+            <div className="cart row">
+                <div className="cart-container col-7">
                     <div className="cart-title-container">
                         <h3 className="cart-title">Your Items</h3>
                     </div>
@@ -64,16 +90,27 @@ export default function ShoppingCart() {
                                             productName={cartItem.productName}
                                             brand={cartItem.brand}
                                             price={cartItem.price}
+                                            photos={cartItem.photos}
                                             quantity={cartItem.quantity}
                                             onDelete={handleDeleteItem}
+                                            onQuantityChange={handleQuantityChange}
                                         />
                                     ))
                                 )}
                             </div>
                         </li>
                     </ul>
-
-
+                </div>
+                <div className="total-container col-2">
+                    <div className="price-container">
+                        <h4 className="total-txt">Subtotal:</h4>
+                        <h4 className="total-amount">${subTotal.toFixed(2)}</h4>
+                    </div>
+                    <div className="proceed-container">
+                        <button className="btn btn-primary proceed-btn">
+                            Proceed to Checkout
+                        </button>
+                    </div>
                 </div>
             </div>
 

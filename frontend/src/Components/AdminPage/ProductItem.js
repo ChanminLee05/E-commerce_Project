@@ -1,9 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import "../AdminPage/ProductItem.css";
-import {toast, ToastContainer} from "react-toastify";
+import axios from "axios";
 
-const ProductItem = ({productId, productName, categoryName, description, price, stockQuantity}) => {
-    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+const ProductItem = ({productId, productName, categoryId, categoryName, brand, description, price, stockQuantity, imageUrl, photos }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [fileList, setFileList] = useState([]);
+
+    const displayImages = photos && photos.length > 0 ? photos : imageUrl;
+    const imagePath = displayImages.length > 0 ? displayImages[currentImageIndex] : null;
 
     const categories = [
         { categoryId: 1, category_name: 'Fashion & Clothes' },
@@ -15,35 +20,38 @@ const ProductItem = ({productId, productName, categoryName, description, price, 
     const [formData, setFormData] = useState({
         productId: '',
         productName: '',
+        brand:'',
         categoryId: '',
         price: '',
-        stock_quantity: '',
+        stockQuantity: '',
         description: '',
-        // image: null
+        imageUrl: [],
+        photos: []
     });
 
-    const toggleAccordion = () => {
-        setIsAccordionOpen(!isAccordionOpen);
+    const handleMouseEnter = () => {
+        if (displayImages.length > 1) {
+            const interval = setInterval(() => {
+                setCurrentImageIndex(prevIndex =>
+                    prevIndex < displayImages.length - 1 ? prevIndex + 1 : 0
+                );
+            }, 1000);
+
+            setTimeout(() => {
+                clearInterval(interval);
+            }, 3000);
+        }
     };
 
-    function productChange(e) {
-        const { name, value, files } = e.target;
-        console.log(`Changing ${name} to ${value}`);
+    const handleMouseLeave = () => {
+        setCurrentImageIndex(0);
+    };
+
+    function handleChange(e) {
+        const { name, value } = e.target;
         if (name === 'category_name') {
-            const selectedCategory = categories.find(category => category.category_name === value);
-            setFormData(prevState => ({
-                ...prevState,
-                category_name: value,
-                categoryId: selectedCategory ? selectedCategory.categoryId : ''
-            }));
-            // } else if (files) {
-            //     console.log(`Found file: ${files[0].name}`);
-            //     setFormData(prevState => ({
-            //         ...prevState,
-            //         [name]: files[0] // Store the file object
-            //     }));
+            handleCategoryChange(name, value);
         } else {
-            console.log(`Setting ${name} to ${value}`);
             setFormData(prevState => ({
                 ...prevState,
                 [name]: value
@@ -51,74 +59,111 @@ const ProductItem = ({productId, productName, categoryName, description, price, 
         }
     }
 
-    function handleUpdate(e) {
+    function handleImage(event) {
+        const files = event.target.files;
+        if (files.length === 0) {
+            setFormData(prevState => ({
+                ...prevState,
+                photos: null
+            }));
+        } else {
+            const fileList = Array.from(files);
+            setFileList(fileList);
+            setFormData(prevState => ({
+                ...prevState,
+                photos: fileList
+            }));
+        }
+    }
+
+    function handleCategoryChange(value) {
+        setFormData(prevState => ({
+            ...prevState,
+            categoryId: value
+        }));
+    }
+
+    const toggleEditMode = () => {
+        setIsEditing(!isEditing);
+        setFileList([]);
+        setFormData({
+            productId,
+            productName,
+            categoryId,
+            brand,
+            description,
+            price,
+            stockQuantity,
+            imageUrl: [],
+            photos: []
+        });
+    };
+
+    async function handleUpdate(e) {
         e.preventDefault();
+
         const formDataToSend = new FormData();
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key]);
+        formDataToSend.append('productName', formData.productName);
+        formDataToSend.append('brand', formData.brand);
+        formDataToSend.append('categoryId', formData.categoryId);
+        formDataToSend.append('price', formData.price);
+        formDataToSend.append('stock_quantity', formData.stockQuantity);
+        formDataToSend.append('description', formData.description);
+
+        if (fileList.length > 0) {
+            for (let i = 0; i < fileList.length; i++) {
+                formDataToSend.append(`image`, fileList[i])
+            }
         }
 
-        fetch(`http://localhost:8080/nexusHub/product/update/${productId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json" // Set the content type to JSON
-            },
-            body: JSON.stringify(formData)
-        })
-            .then((response) => {
-                if (response.ok) {
-                    console.log('Product updated Successfully');
-                    setFormData({
-                        productId: '',
-                        productName: '',
-                        categoryId: '',
-                        price: '',
-                        stock_quantity: '',
-                        description: ''
-                    });
+        const updateConfirmMessage = window.confirm("Are you sure you want to update this product?");
+        if (updateConfirmMessage) {
+            try {
+                const response = await axios.put(`http://localhost:8080/nexusHub/product/update/${productId}`, formDataToSend, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
-                    response.json().then(data => {
-                        toast.success('Product updated Successfully', {
-                            position: "top-center",
-                            draggable: true,
-                            hideProgressBar: true
-                        });
+                console.log('Response from server:', response);
 
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000)
+                if (response.status === 200) {
+                    window.alert('Product updated Successfully');
 
-                    })
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000)
+
                 } else {
-                    console.error('Failed to update product');
-                    toast.warn('Failed to update product', {
-                            position: "top-center",
-                            draggable: true,
-                            hideProgressBar: true
-                        }
-                    );
+                    window.alert('Failed to update product');
                 }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            } catch(error) {
+                if (error.response) {
+                    console.error('Server Error:', error.response.data);
+                    window.alert(`Server Error: ${error.response.data}`);
+                } else if (error.request) {
+                    console.error('No Response:', error.request);
+                    window.alert('No Response from Server');
+                } else {
+                    console.error('Error:', error.message);
+                    window.alert(`Error: ${error.message}`);
+                }
+            }
+        } else {
+            window.location.reload();
+        }
     }
 
     function handleDelete(e) {
         e.preventDefault();
-        if (window.confirm("Are you sure you want to delete this product?")) {
+        const deleteConfirmMessage = window.confirm("Are you sure you want to delete this product?");
+        if (deleteConfirmMessage) {
             fetch(`http://localhost:8080/nexusHub/product/delete/${productId}`, {
                 method: "DELETE"
             })
                 .then((response) => {
                     if (response.ok) {
-                        console.log('Product deleted Successfully');
-
-                        toast.success('Product deleted Successfully', {
-                            position: "top-center",
-                            draggable: true,
-                            hideProgressBar: true
-                        });
+                        window.alert('Product deleted Successfully');
 
                         setTimeout(() => {
                             window.location.reload();
@@ -126,90 +171,136 @@ const ProductItem = ({productId, productName, categoryName, description, price, 
 
                     } else {
                         console.error('Failed to delete product');
-                        toast.warn('Failed to delete product', {
-                                position: "top-center",
-                                draggable: true,
-                                hideProgressBar: true
-                            }
-                        );
+                        window.alert('Failed to delete product');
                     }
                 })
                 .catch((error) => {
                     console.error('Error:', error);
+                    window.alert('Error occurred while deleting product');
                 });
         }
     }
 
     return (
-        <>
-            <tr>
-                <td className="tr-col">{productId}</td>
-                <td className="tr-col">{productName}</td>
-                <td className="tr-col">{categoryName}</td>
-                <td className="tr-col">{description}</td>
-                <td className="tr-col">{price}</td>
-                <td className="tr-col">{stockQuantity}</td>
-                <td className="tr-col"><button className="btn btn-primary" onClick={toggleAccordion}>UPDATE</button></td>
-                <td className="tr-col"><button className="btn btn-danger" onClick={handleDelete}>DELETE</button></td>
-            </tr>
-            {isAccordionOpen && (
-                <tr>
-                    <td colSpan="7">
-                    <form className="add-product-form" onSubmit={handleUpdate}>
-                        <h1>UPDATE PRODUCTS</h1>
-                        <label>
-                            <h4>PRODUCT NAME</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <input type="text" className="form-control" name="productName"  value={formData.productName} onChange={productChange} required={true}></input>
-                        </div>
-                        <label>
-                            <h4>PRODUCT CATEGORY</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <div className="btn-group">
-                                <select className="form-select category-select" name="categoryId" value={formData.categoryId} onChange={productChange} required={true}>
-                                    <option value="">Select Category</option>
-                                    {categories.map(category => (
-                                        <option key={category.categoryId} value={category.categoryId}>
-                                            {category.category_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        <label>
-                            <h4 className="">PRODUCT DESCRIPTION</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <input type="text" className="form-control" name="description" value={formData.description} onChange={productChange} required={true}></input>
-                        </div>
-                        <label>
-                            <h4 className="">AVAILABLE QUANTITY</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <input type="text" className="form-control" name="stock_quantity" value={formData.stock_quantity} onChange={productChange} required={true}></input>
-                        </div>
-                        <label>
-                            <h4 className="">PRICE</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <span className="input-group-text price-icon">$</span>
-                            <input type="text" className="form-control" name="price" value={formData.price} onChange={productChange} required={true}></input>
-                        </div>
-                        <label>
-                            <h4>IMAGE</h4>
-                        </label>
-                        <div className="input-group mb-3 input-box">
-                            <input type="file" className="form-control" name="image" id="formFileSm" onChange={productChange}></input>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Save Product</button>
-                    </form>
-                    </td>
-                </tr>
-            )}
-            <ToastContainer />
-        </>
+        <tr>
+            <td className="tr-col product-info-txt">{productId}</td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="productName"
+                        value={formData.productName}
+                        onChange={handleChange}
+                        multiple
+                    />
+                ) : (
+                    productName
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <select
+                        className="form-select category-select"
+                        name="category_name"
+                        value={formData.categoryId}
+                        onChange={(e) => handleCategoryChange(e.target.value)}
+                    >
+                        <optgroup label="Select Category" autoFocus>
+                            {categories.map(category => (
+                                <option key={category.categoryId} value={category.categoryId}>
+                                    {category.category_name}
+                                </option>
+                            ))}
+                        </optgroup>
+                    </select>
+                ) : (
+                    categoryName
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="brand"
+                        value={formData.brand}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    brand
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    description
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    price
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="stockQuantity"
+                        value={formData.stockQuantity}
+                        onChange={handleChange}
+                        accept="image/*"
+                        multiple
+                    />
+                ) : (
+                    stockQuantity
+                )}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <input
+                        type="file"
+                        className="form-control"
+                        name="image"
+                        onChange={handleImage}
+                        accept="image/*"
+                        multiple
+                    />
+                ) : displayImages.length > 0 ? (
+                    <img
+                        className="product-info-img"
+                        src={imagePath}
+                        alt={productName}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    />
+                ) : null}
+            </td>
+            <td className="tr-col product-info-txt">
+                {isEditing ? (
+                    <button className="btn btn-primary update-btn" onClick={handleUpdate}>UPDATE</button>
+                ) : (
+                    <button className="btn btn-primary update-btn" onClick={toggleEditMode}>EDIT</button>
+                )}
+            </td>
+            <td className="tr-col product-info-txt"><button className="btn btn-danger delete-product-btn" onClick={handleDelete}>DELETE</button></td>
+        </tr>
     );
 };
 

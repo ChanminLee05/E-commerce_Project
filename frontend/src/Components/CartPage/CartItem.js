@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import './CartItem.css';
 
-const CartItem = ({ cartId, cartItemId, productName, brand, images, price, onDelete }) => {
+const CartItem = ({ cartId, cartItemId, productName, brand, images, price, onDelete, onQuantityChange, photos }) => {
     const [quantity, setQuantity] = useState(1);
-    const [cartItems, setCartItems] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(price);
+
+    const displayImages = photos && photos.length > 0 ? photos : images;
+    const imagePath = displayImages.length > 0 ? displayImages[0] : null;
 
     function handleQuantityChange(e) {
-        setQuantity(parseInt(e.target.value));
+        const selectedQuantity = parseInt(e.target.value);
+        setQuantity(selectedQuantity);
+        setTotalPrice(price * selectedQuantity);
+        onQuantityChange(cartItemId, selectedQuantity);
     }
 
     async function deleteItemFromCart() {
@@ -35,9 +41,9 @@ const CartItem = ({ cartId, cartItemId, productName, brand, images, price, onDel
     return (
         <div className="cart-item-container">
             <div className="cart-item">
-                {images && (
+                {displayImages && (
                     <img
-                        src={images[0]}
+                        src={imagePath}
                         className="cart-item-card-images"
                         alt={productName}
                     />
@@ -45,7 +51,7 @@ const CartItem = ({ cartId, cartItemId, productName, brand, images, price, onDel
                 <div className="card-body cart-item-desc">
                     <p className="cart-item-brand-txt">{brand}</p>
                     <h5 className="cart-item-productName">{productName}</h5>
-                    <h4 className="cart-item-price-txt">${price}</h4>
+                    <h4 className="cart-item-price-txt">${totalPrice.toFixed(2)}</h4>
                     <div className="quantity-container">
                         <span className="quantity-txt">Qty:</span>
                         <select className="form-select select-quantity" value={quantity} onChange={handleQuantityChange}>

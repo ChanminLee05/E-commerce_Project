@@ -1,3 +1,23 @@
-.tr-col {
+.product-info-txt {
+    word-wrap: break-word;
+}
+
+.product-info-img {
+    width: 5vw;
+    height: 5vw;
+}
+
+.update-btn {
+    position: relative;
+    left: 0.5vw;
+    top: 1vw;
+    font-size: 1vw;
+}
+
+.delete-product-btn {
+    position: relative;
+    right: 0.2vw;
+    top: 1vw;
+    background-color: red;
     font-size: 1vw;
 }

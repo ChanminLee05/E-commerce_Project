@@ -35,41 +35,51 @@ const ProductControlPage = () => {
     };
 
     return (
-        <div className="admin-page">
+        <>
             <MainPageSideBar/>
-            <div className="form-control admin-form">
-                <button className="btn btn-primary">
-                    <Link to="/admin/add-product" className="goToAddProduct">Add new product</Link>
-                </button>
-                <table className="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col" className="th-col">#</th>
-                        <th scope="col" className="th-col">Name</th>
-                        <th scope="col" className="th-col">Category</th>
-                        <th scope="col" className="th-col">Description</th>
-                        <th scope="col" className="th-col">Price</th>
-                        <th scope="col" className="th-col">Quantity</th>
-                        <th scope="col" className="th-col">Update</th>
-                        <th scope="col" className="th-col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {products.map((product, index) => (
-                        <ProductItem
-                            key={index}
-                            productId={product.productId}
-                            productName={product.productName}
-                            categoryName={product.category.categoryName}
-                            description={product.description}
-                            price={product.price}
-                            stockQuantity={product.stockQuantity}
-                        />
-                    ))}
-                    </tbody>
-                </table>
+            <div className="admin-user-page">
+                <div className="form-control admin-form">
+                    <button className="btn btn-primary add-product-btn">
+                        <Link to="/admin/add-product" className="goToAddProduct">
+                            <i className="bi bi-pencil-square"></i>
+                            Add new product
+                        </Link>
+                    </button>
+                    <table className="table table-striped table-hover user-control-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" className="th-col">#</th>
+                                <th scope="col" className="th-col">Name</th>
+                                <th scope="col" className="th-col">Category</th>
+                                <th scope="col" className="th-col">Brand</th>
+                                <th scope="col" className="th-col">Description</th>
+                                <th scope="col" className="th-col">Price</th>
+                                <th scope="col" className="th-col">Quantity</th>
+                                <th scope="col" className="th-col">Images</th>
+                                <th scope="col" className="th-col">Update</th>
+                                <th scope="col" className="th-col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {products.map((product, index) => (
+                                <ProductItem
+                                    key={index}
+                                    productId={product.productId}
+                                    productName={product.productName}
+                                    brand={product.brand}
+                                    categoryName={product.category.categoryName}
+                                    description={product.description}
+                                    price={product.price}
+                                    stockQuantity={product.stockQuantity}
+                                    imageUrl={product.imageUrl}
+                                    photos={product.photos}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
