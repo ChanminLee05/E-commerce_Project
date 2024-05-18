@@ -34,8 +34,8 @@
 /*ChatBot Section*/
 .chat-container {
     position: fixed;
-    bottom: 2vw;
-    right: 2vw;
+    bottom: 3vw;
+    right: 3vw;
     z-index: 1000;
 }
 
