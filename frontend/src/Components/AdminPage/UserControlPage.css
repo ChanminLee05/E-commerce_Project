@@ -1,0 +1,31 @@
+.admin-user-page {
+    background-color: #b5e1a3;
+    height: 100%;
+    cursor: default;
+    padding-top: 2vw;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-form {
+    width: 88vw;
+    min-height: 100vh;
+    border: none;
+    background-color: #b5e1a3;
+}
+
+.user-control-table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th.th-col {
+    padding: 20px;
+    font-size: 1.2vw;
+}
+
+td.tr-col {
+    padding: 20px;
+    font-size: 1vw;
+    max-width: 19vw;
+}

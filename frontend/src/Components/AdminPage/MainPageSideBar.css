@@ -1,4 +1,60 @@
+.navbar-title-container {
+    display: flex;
+    align-items: center;
+}
+
 .admin-logo {
-    margin-left: 5vw;
     font-size: 1.5vw;
+}
+
+.bi-database {
+    font-size: 2vw;
+    margin: 0 1vw 0 10vw;
+    color: #0cbbae;
+}
+
+.toggle-btn {
+    margin-right: 2vw;
+}
+
+/*Canvas-section*/
+.offcanvas.offcanvas-end {
+    /*width: 20vw;*/
+}
+
+.admin-side-bar-header {
+    background-color: #b5e1a3;
+    border-radius: 3px;
+}
+
+.admin-side-bar-title {
+
+}
+
+.admin-side-bar-link {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5vw;
+    margin-top: 1vw;
+    color: black;
+    text-decoration: none;
+}
+
+.admin-side-bar-txt {
+    font-size: 1.3vw;
+}
+
+.admin-side-bar-link:hover .admin-side-bar-txt{
+    text-decoration: underline;
+    font-size: 1.5vw;
+    transition: font-size 0.1s ease-in;
+}
+
+.admin-side-bar-link:hover .admin-side-bar-icon {
+    transform: scale(1.2);
+    transition: transform 0.1s ease;
+}
+
+.admin-side-bar-icon {
+    font-size: 1.2vw;
 }

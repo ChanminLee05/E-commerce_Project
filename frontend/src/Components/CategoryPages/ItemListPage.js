@@ -46,7 +46,8 @@ const ItemListPage = ({ categoryId, initialItemCount, loadMoreIncrement }) => {
                             productId={item.productId}
                             productName={item.productName}
                             brand={item.brand}
-                            images={item.images}
+                            imageUrl={item.imageUrl}
+                            photos={item.photos}
                             price={item.price}
                             description={item.description}
                         />

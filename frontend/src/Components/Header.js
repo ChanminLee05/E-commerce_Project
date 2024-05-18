@@ -14,12 +14,10 @@ export default function Header() {
     const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        // Check if user is logged in by checking localStorage
-        const token = localStorage.getItem('token'); // Assuming you store token upon successful login
+        const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
 
         const handleBeforeUnload = (event) => {
-            // Clear token from localStorage upon leaving the page or closing the browser window
             localStorage.removeItem('token');
         };
 
@@ -40,11 +38,9 @@ export default function Header() {
             body: JSON.stringify(user)
         }).then((response) => {
             if (response.ok) {
-                console.log('Login Successful');
                 response.json().then(data => {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userId', data.userId);
-                    console.log("UserID", data.userId);
                     setIsLoggedIn(true);
                     // Save username to localStorage if "Remember Me" is checked
                     if (rememberMe) {
@@ -63,7 +59,11 @@ export default function Header() {
                 // Schedule token removal after 1 hour
                 setTimeout(() => {
                     localStorage.removeItem('token');
+
                     setIsLoggedIn(false);
+
+                    window.location.href = '/main';
+
                     toast.warn('Session Expired. Please login again.', {
                         position: "top-center",
                         draggable: true,
@@ -154,6 +154,7 @@ export default function Header() {
                                 </div>
                                 <button type="submit" className="btn btn-primary" onClick={handleSignIn}>Sign in</button>
                                 <Link to="/register" className="register-link"><button className="btn btn-primary">Sign Up</button></Link>
+                                <Link to="/admin/login" className="register-link"><button className="btn btn-primary">Admin Page</button></Link>
                             </form>
                         </div>
                     </li>

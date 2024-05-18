@@ -1,8 +1,15 @@
 .cart-item-container {
     border: 1px solid black;
     border-radius: 10px;
-    height: 16vw;
+    height: 15vw;
     cursor: default;
+    box-shadow: 20px 20px 30px rgb(192, 192, 192);
+    transition: ease-in 0.3s;
+}
+
+.cart-item-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 20px 20px 30px rgb(128, 128, 128);
 }
 
 .cart-item {
@@ -11,8 +18,8 @@
 }
 
 .cart-item-card-images {
-    width: 15vw;
-    height: 13vw;
+    width: 14vw;
+    height: 12vw;
     border-radius: 10px;
 }
 
@@ -22,21 +29,20 @@
 
 .cart-item-brand-txt {
     color: #606063;
-    font-size: 1.3vw;
+    font-size: 1.2vw;
     margin-bottom: 1vw;
     font-family: "Freeman", sans-serif;
 }
 
 .cart-item-productName {
-    font-size: 1.5vw;
+    font-size: 1.4vw;
     font-family: "Bebas Neue", sans-serif;
-    margin: 0 1vw 0 0;
 }
 
 .cart-item-price-txt {
     color: #088178;
-    font-size: 1.5vw;
-    margin-top: 2vw;
+    font-size: 1.2vw;
+    margin-top: 1.5vw;
 }
 
 /*Quantity Section*/
@@ -46,11 +52,14 @@
     justify-content: center;
     border: 1px solid black;
     border-radius: 10px;
-    background-color: #c4c2c2;
-    height: 2.2vw;
+    background-color: white;
+    height: 2.5vw;
     width: 8vw;
     margin: 1.5vw 1vw 0 0 ;
     cursor: pointer;
+    position: relative;
+    bottom: 1vw;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.2) inset;
 }
 
 .quantity-txt {
@@ -60,16 +69,37 @@
 
 .select-quantity {
     width: 4vw;
-    height: 2vw;
-    background-color: #c4c2c2;
+    height: 2.2vw;
+    background-color: #f5f4f4;
     border: none;
     cursor: pointer;
+
 }
 
 .delete-btn {
     width: 5vw;
-    height: 2vw;
-    border-radius: 10px;
+    height: 2.5vw;
+    position: relative;
+    left: 1vw;
+    bottom: 1vw;
+    outline:0;
     font-size: 1vw;
-    background-color: #c4c2c2;
+    font-weight:600;
+    background:#fff;
+    border-radius: 10px;
+    transition:all .3s ease-out;
+    box-shadow:inset 0 -3px 0 0 rgba(0,0,0,.2),
+    3px 3px 0 0 rgb(183, 182, 182),
+    4px 4px 0 0 rgb(164, 163, 163);
+}
+
+.delete-btn:hover{
+    color:#444;
+}
+
+.delete-btn:active{
+    color:#222;
+    box-shadow:inset 0 -4px 0 0 rgba(0,0,0,.2),
+    1px 1px 0 0 rgb(106, 163, 137),
+    2px 2px 0 0 rgb(121, 186, 156);
 }

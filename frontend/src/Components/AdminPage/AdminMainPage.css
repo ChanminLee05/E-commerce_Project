@@ -1,0 +1,91 @@
+.admin-main-page {
+    background-color: #d3e0ef;
+    height: 100vh;
+    cursor: default;
+}
+
+.admin-dashboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 5vw;
+}
+
+.admin-top-section {
+    display: flex;
+    flex-direction: column;
+    margin: 1vw 0 1vw 0;
+}
+
+.top-title {
+    color: #5e5b5b;
+}
+
+/*Mid-section*/
+.admin-mid-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 5vw;
+}
+
+.product-user-section {
+    display: flex;
+    height: 5.5vw;
+    width: 14vw;
+    padding: 1vw;
+    border-radius: 10px;
+    justify-content: space-between;
+}
+.product-section {
+    background-color: #b5e1a3;
+}
+
+.user-section {
+    background-color: #e5dc6f;
+}
+
+.sales-section {
+    background-color: #e08484;
+}
+
+.product-user-title {
+    font-size: 1vw;
+    color: #494747;
+}
+
+.product-user-text {
+    font-size: 1.5vw;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.right {
+    display: flex;
+    margin-right: 1vw;
+}
+
+.product-user-icon {
+    font-size: 1.5vw;
+    display: flex;
+    align-items: center;
+}
+
+/*Bottom-section*/
+.admin-bottom-section {
+    margin-top: 2vw;
+    background-color: white;
+    border-radius: 10px;
+    padding: 2vw;
+}
+
+.chart {
+    width: 900px;
+    height: 350px;
+}
+

@@ -3,16 +3,19 @@ import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 
 
-const Item = ({ productId, brand, productName, images, description, price }) => {
+const Item = ({ productId, brand, productName, imageUrl, description, price, photos }) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [saveToWishlist, setSaveToWishlist] = useState(false);
 
+    const displayImages = photos && photos.length > 0 ? photos : imageUrl;
+    const imagePath = displayImages.length > 0 ? displayImages[currentImageIndex] : null;
+
     const handleMouseEnter = () => {
         const interval = setInterval(() => {
             setCurrentImageIndex(prevIndex =>
-                prevIndex < images.length - 1 ? prevIndex + 1 : 0
+                prevIndex < displayImages.length - 1 ? prevIndex + 1 : 0
             );
         }, 1000);
 
@@ -60,11 +63,19 @@ const Item = ({ productId, brand, productName, images, description, price }) => 
                 }
             })
             .then(() => {
-                toast.success('Item added to cart successfully');
+                toast.success('Item added to cart successfully', {
+                    position: "top-center",
+                    draggable: true,
+                    hideProgressBar: true
+                });
             })
             .catch(error => {
                 console.error('Error adding item to cart:', error);
-                toast.error('Failed to add item to cart');
+                toast.error('Please login first to add item to your Cart', {
+                    position: "top-center",
+                    draggable: true,
+                    hideProgressBar: true
+                });
             })
             .finally(() => {
                 setIsAddingToCart(false);
@@ -106,9 +117,9 @@ const Item = ({ productId, brand, productName, images, description, price }) => 
     return (
         <div className="card-container">
             <div className="card">
-                {images && (
+                {displayImages && (
                     <img
-                        src={images[currentImageIndex]}
+                        src={imagePath}
                         className="card-img-top card-images"
                         alt={productName}
                         onMouseEnter={handleMouseEnter}
@@ -125,7 +136,7 @@ const Item = ({ productId, brand, productName, images, description, price }) => 
                               {showFullDescription ? '...less' : '...more'}</span>
                         )}
                     </p>
-                    <h4 className="price-txt">${price}</h4>
+                    <h4 className="price-txt">${price.toFixed(2)}</h4>
                     <div className="add-to-cart-container">
                         <button
                             className="add-to-wishlist"

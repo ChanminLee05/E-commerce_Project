@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {toast, ToastContainer} from "react-toastify";
 import "./AddProductPage.css";
+import axios from "axios";
 
 const AddProductPage = () => {
+    const [fileList, setFileList] = useState([]);
+
     const categories = [
         { categoryId: 1, category_name: 'Fashion & Clothes' },
         { categoryId: 2, category_name: 'Electronics' },
@@ -12,31 +15,18 @@ const AddProductPage = () => {
 
     const [formData, setFormData] = useState({
         productName: '',
+        brand: '',
         categoryId: '',
         price: '',
         stock_quantity: '',
-        description: '',
-        // image: null
+        description: ''
     });
 
     function handleChange(e) {
-        const { name, value, files } = e.target;
-        console.log(`Changing ${name} to ${value}`);
+        const { name, value } = e.target;
         if (name === 'category_name') {
-            const selectedCategory = categories.find(category => category.category_name === value);
-            setFormData(prevState => ({
-                ...prevState,
-                category_name: value,
-                categoryId: selectedCategory ? selectedCategory.categoryId : ''
-            }));
-        // } else if (files) {
-        //     console.log(`Found file: ${files[0].name}`);
-        //     setFormData(prevState => ({
-        //         ...prevState,
-        //         [name]: files[0] // Store the file object
-        //     }));
+            handleCategoryChange(name, value);
         } else {
-            console.log(`Setting ${name} to ${value}`);
             setFormData(prevState => ({
                 ...prevState,
                 [name]: value
@@ -44,74 +34,138 @@ const AddProductPage = () => {
         }
     }
 
-    function handleSubmit(e) {
+    function handleImage(event) {
+        const files = event.target.files;
+        if (files.length === 0) {
+            setFormData(prevState => ({
+                ...prevState,
+                image: null
+            }));
+        } else {
+            const fileList = Array.from(files);
+            setFileList(fileList);
+            setFormData(prevState => ({
+                ...prevState,
+                image: fileList
+            }));
+        }
+    }
+
+    function handleCategoryChange(value) {
+        setFormData(prevState => ({
+            ...prevState,
+            categoryId: value
+        }));
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
         const formDataToSend = new FormData();
-        for (const key in formData) {
-            formDataToSend.append(key, formData[key]);
+        formDataToSend.append('productName', formData.productName);
+        formDataToSend.append('brand', formData.brand);
+        formDataToSend.append('categoryId', formData.categoryId);
+        formDataToSend.append('price', formData.price);
+        formDataToSend.append('stock_quantity', formData.stock_quantity);
+        formDataToSend.append('description', formData.description);
+
+        if (fileList.length > 0) {
+            for (let i = 0; i < fileList.length; i++) {
+                formDataToSend.append(`image`, fileList[i])
+            }
         }
 
-        fetch("http://localhost:8080/nexusHub/product/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json" // Set the content type to JSON
-            },
-            body: JSON.stringify(formData)
-        })
-            .then((response) => {
-            if (response.ok) {
+        try {
+            const response = await axios.post('http://localhost:8080/nexusHub/product/add', formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
                 console.log('Product added Successfully');
                 setFormData({
                     productName: '',
+                    brand: '',
                     categoryId: '',
                     price: '',
                     stock_quantity: '',
                     description: ''
                 });
-                response.json().then(data => {
-                    toast.success('Product added Successfully', {
-                        position: "top-center",
-                        draggable: true,
-                        hideProgressBar: true
-                    });
-                })
+                window.location.href = '/admin/product-control';
+
+                toast.success('Product added Successfully', {
+                    position: 'top-center',
+                    draggable: true,
+                    hideProgressBar: true,
+                });
             } else {
                 console.error('Failed to save product');
                 toast.warn('Failed to save product', {
-                        position: "top-center",
-                        draggable: true,
-                        hideProgressBar: true
-                    }
-                );
+                    position: 'top-center',
+                    draggable: true,
+                    hideProgressBar: true,
+                });
             }
-        })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        } catch (error) {
+            if (error.response) {
+                console.error('Server Error:', error.response.data);
+                toast.error(`Server Error: ${error.response.data}`, {
+                    position: 'top-center',
+                    draggable: true,
+                    hideProgressBar: true,
+                });
+            } else if (error.request) {
+                console.error('No Response:', error.request);
+                toast.error('No Response from Server', {
+                    position: 'top-center',
+                    draggable: true,
+                    hideProgressBar: true,
+                });
+            } else {
+                console.error('Error:', error.message);
+                toast.error(`Error: ${error.message}`, {
+                    position: 'top-center',
+                    draggable: true,
+                    hideProgressBar: true,
+                });
+            }
+        }
     }
 
     return (
         <div className="add-product-page">
             <form className="add-product-form" onSubmit={handleSubmit}>
-                <h1>ADD PRODUCTS</h1>
+                <h1 className="add-product-title">ADD PRODUCTS</h1>
                 <label>
                     <h4>PRODUCT NAME</h4>
                 </label>
                 <div className="input-group mb-3 input-box">
-                    <input type="text" className="form-control" name="productName"  value={formData.productName} onChange={handleChange} required={true}></input>
+                    <textarea className="form-control" name="productName"  value={formData.productName} onChange={handleChange} required={true}></textarea>
+                </div>
+                <label>
+                    <h4>BRAND NAME</h4>
+                </label>
+                <div className="input-group mb-3 input-box">
+                    <textarea className="form-control" name="brand"  value={formData.brand} onChange={handleChange} required={true}></textarea>
                 </div>
                 <label>
                     <h4>PRODUCT CATEGORY</h4>
                 </label>
                 <div className="input-group mb-3 input-box">
                     <div className="btn-group">
-                        <select className="form-select category-select" name="categoryId" value={formData.categoryId} onChange={handleChange} required={true}>
-                            <option value="">Select Category</option>
-                            {categories.map(category => (
-                                <option key={category.categoryId} value={category.categoryId}>
-                                    {category.category_name}
-                                </option>
-                            ))}
+                        <select className="form-select category-select"
+                                name="category_name"
+                                value={formData.categoryId}
+                                onChange={(e) => handleCategoryChange(e.target.value)}
+                                required={true}
+                        >
+                            <optgroup label="Select Category">
+                                {categories.map(category => (
+                                    <option key={category.categoryId} value={category.categoryId}>
+                                        {category.category_name}
+                                    </option>
+                                ))}
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -119,7 +173,7 @@ const AddProductPage = () => {
                     <h4 className="">PRODUCT DESCRIPTION</h4>
                 </label>
                 <div className="input-group mb-3 input-box">
-                    <input type="text" className="form-control" name="description" value={formData.description} onChange={handleChange} required={true}></input>
+                    <textarea className="form-control add-product-desc" name="description" value={formData.description} onChange={handleChange} required={true}></textarea>
                 </div>
                 <label>
                     <h4 className="">AVAILABLE QUANTITY</h4>
@@ -138,7 +192,14 @@ const AddProductPage = () => {
                     <h4>IMAGE</h4>
                 </label>
                 <div className="input-group mb-3 input-box">
-                    <input type="file" className="form-control" name="image" id="formFileSm" onChange={handleChange}></input>
+                    <input type="file"
+                           accept="image/*"
+                           className="form-control"
+                           name="image"
+                           onChange={handleImage}
+                           multiple>
+
+                    </input>
                 </div>
                 <button type="submit" className="btn btn-primary">Save Product</button>
             </form>

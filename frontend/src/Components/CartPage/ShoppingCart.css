@@ -1,15 +1,17 @@
 .cart {
-    background-color: #c4c2c2;
+    background-color: #e9f5dd;
     padding: 20px;
     min-height: 100vh;
     max-width: 100%;
-    margin: 0 auto;
+    display: flex;
+    margin: 0;
 }
 
 .cart-container {
-    margin: 5vw 10vw;
+    margin: 5vw 3vw 5vw 10vw;
     background-color: white;
     border-radius: 5px;
+    cursor: default;
 }
 
 .cart-title-container {
@@ -37,9 +39,45 @@
     flex-direction: column;
     margin: 2vw;
     row-gap: 0.5vw;
-    width: 90%;
+    width: 70%;
 }
 
-.card-body {
+/*SubTotal-section*/
+.total-container {
+    background-color: white;
+    display: flex;
+    margin: 5vw 0 5vw 0;
+    height: 10vw;
+    border-radius: 10px;
+    padding: 1vw;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: default;
+}
 
+.price-container {
+    display: flex;
+    margin-bottom: 1.2vw;
+}
+
+.total-txt {
+    font-size: 1.2vw;
+}
+
+.total-amount {
+    font-size: 1.3vw;
+    margin-left: 1vw;
+    font-weight: bolder;
+}
+
+.proceed-btn {
+    font-size: 1vw;
+    background-color: #088178;
+    border: 1px solid #0cbbae;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 0, 0, 0.2) inset;
+}
+
+.proceed-btn:hover {
+    background-color: #045b54;
 }
