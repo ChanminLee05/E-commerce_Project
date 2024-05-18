@@ -29,7 +29,7 @@
 
 /*Side NavBar Section*/
 .nav-container {
-    margin-left: 15vw;
+    margin-left: 13vw;
 }
 
 .nav-list {
@@ -62,8 +62,12 @@
     text-decoration: underline;
 }
 
-.find-link {
+.header-form-label {
+    font-size: 0.9vw;
+}
 
+.header-form-input {
+    font-size: 0.8vw;
 }
 
 .find-txt {
@@ -71,17 +75,30 @@
     margin: 1vw 0 1vw -1vw;
 }
 
-.find:hover {
+.find-txt:hover {
     color: #3b3b3b;
 }
 
 .register-link {
-    margin-left: 2vw;
+    margin-left: 1vw;
+    font-size: 1vw;
 }
 
 .sign-form {
-    width: 20vw;
+    width: 22vw;
 }
+
+.header-form-btn-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.header-form-btn {
+    width: 6vw;
+    height: 2vw;
+    font-size: 0.8vw;
+}
+
 /*Shop Button*/
 .shop-list-container {
     width: 13vw;

@@ -17,7 +17,7 @@ export const chatResponseObjects = [
     },
     {
         question: /^(what is your name\?|who are you\?)$/i,
-        response: "I'm a chatbot, nice to meet you!"
+        response: "I'm Nexusbot, nice to meet you!"
     },
     {
         question: /^(what is the date today\??|what is date today\??|what is date\??|date\??)$/i,

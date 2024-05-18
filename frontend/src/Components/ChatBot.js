@@ -2,6 +2,10 @@ import React, {useEffect, useState} from 'react';
 import "./ChatBot.css";
 import {Link} from "react-router-dom";
 import { chatResponseObjects } from './ChatBotResponse';
+import RobotDog from '../Assets/robot-dog.png';
+import RobotAssistant from '../Assets/robot-assistant.png';
+import Robot from '../Assets/robot.png';
+
 
 export default function ChatBot({ onClose }) {
     const [isOpen, setIsOpen] = useState(true);
@@ -121,21 +125,22 @@ export default function ChatBot({ onClose }) {
         <div className="chatbot" style={{ display: isOpen ? 'block' : 'none' }}>
             <div className="chatbot-header">
                 <button type="button" className="btn-close close-btn" aria-label="Close" onClick={closeChat}></button>
-                <span className="chatbot-name">ChatBot</span>
+                <img src={Robot} alt="robot" className="header-robot"/>
+                <span className="chatbot-name">Virtual Assistant</span>
             </div>
             <div className="chatBox">
                 <div className="initial-message-container">
-                    <span id="robot" className="bi bi-robot robot-icon"></span>
+                    <img className="robot-dog" src={RobotDog} alt="robot-dog"/>
                     <div className="initial-message">
-                        <p id="chatbotInitialMessage" className="message1">Hi! I am a Chatbot</p>
-                        <p className="message1">How can I be of assistance to you?</p>
+                        <p id="chatbotInitialMessage" className="message1">I am <b>NexusBot</b></p>
                     </div>
                 </div>
                 <div className="quick-link-container">
+                    <p className="quick-message">How can I help you?</p>
                     <ul className="quick-link-list">
-                        <li className="link-item"><i className="bi bi-caret-right"></i><Link to="/tech-support">Technical issue?</Link></li>
-                        <li className="link-item"><i className="bi bi-caret-right"></i><Link to="/tech-support">Request return your order</Link></li>
-                        <li className="link-item"><i className="bi bi-caret-right"></i><Link to="/cart">Check your order status</Link></li>
+                        <li className="link-item"><Link to="/tech-support" className="tech-support-link"><b>Tech Issue</b></Link></li>
+                        <li className="link-item"><Link to="/tech-support" className="tech-support-link"><b>Return</b></Link></li>
+                        <li className="link-item"><Link to="/cart" className="tech-support-link"><b>Order Status</b></Link></li>
                     </ul>
                 </div>
                 <div className="QA-container">
@@ -143,14 +148,14 @@ export default function ChatBot({ onClose }) {
                         {chatMessages.map((message, index) => (
                             <li key={index} className={message.type === 'user' ? 'user-message' : 'robot-message'}>
                                 {message.type === 'user' && <span>You: </span>}
-                                {message.type === 'bot' && <span id="robot" className="bi bi-robot robot-icon"></span>}
+                                {message.type === 'bot' && <img src={RobotAssistant} alt="robot" className="robot-assist-icon"/>}
                                 <span>{message.text}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="input-group flex-nowrap input-container">
-                    <input type="text" className="type-section" id="messageInput" placeholder="Type message here" autoComplete="off" autoFocus="true"/>
+                    <input type="text" className="type-section" id="messageInput" placeholder="Type message here" autoComplete="off" autoFocus={true}/>
                         <i id="submitButton" className="bi bi-arrow-right-circle"/>
                 </div>
             </div>

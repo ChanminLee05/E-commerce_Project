@@ -56,7 +56,7 @@
 .tech-chat-container {
     position: fixed;
     bottom: 3vw;
-    right: 10vw;
+    right: 5vw;
     z-index: 1000;
     width: 14vw;
 }

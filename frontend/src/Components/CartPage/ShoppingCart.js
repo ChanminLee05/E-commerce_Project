@@ -2,39 +2,54 @@ import React, {useEffect, useState} from "react";
 import Header from "../Header";
 import "./ShoppingCart.css";
 import CartItem from "./CartItem";
-import cartItem from "./CartItem";
+import { useNavigate } from "react-router-dom";
 import {toast} from "react-toastify";
+import Cart from '../../Assets/shopping-cart.png';
 
 export default function ShoppingCart() {
     const [cartItems, setCartItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [cartId, setCartId] = useState(null);
     const [subTotal, setSubTotal] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCartItems = async () => {
-            const userId = localStorage.getItem('userId');
-            if (userId) {
-                try {
-                    const response = await fetch(`http://localhost:8080/nexusHub/cart/${userId}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log("data", data)
-                        setCartItems(data.cartItemList);
-                        setCartId(data.cartId)
-                        setIsLoading(false);
-                    } else {
-                        console.error("Failed to fetch cart items");
-                    }
-                } catch (error) {
-                    console.error("Error fetching cart items:", error);
-                }
-            }
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            handleLoginRedirect();
+            return;
+        }
 
-        };
-
-        fetchCartItems();
+        fetchCartItems(userId);
     },[]);
+
+    const fetchCartItems = async (userId) => {
+
+        if (userId) {
+            try {
+                const response = await fetch(`http://localhost:8080/nexusHub/cart/${userId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCartItems(data.cartItemList);
+                    setCartId(data.cartId)
+                    setIsLoading(false);
+                } else if (response.status === 404) {
+                    handleLoginRedirect();
+                } else {
+                    console.error("Error fetching cart items:", response.statusText);
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error("Error fetching cart items:", error);
+                setIsLoading(false);
+            }
+        }
+    };
+
+    function handleLoginRedirect () {
+        window.alert("Please Login First");
+        navigate("/main");
+    }
 
     const handleDeleteItem = (deletedItemId) => {
         toast.success("Item deleted from your cart", {
@@ -47,7 +62,6 @@ export default function ShoppingCart() {
     }
 
     const handleQuantityChange = (cartItemId, newQuantity) => {
-        // Update the quantity of the item in the cart
         setCartItems(prevCartItems =>
             prevCartItems.map(item =>
                 item.cartItemId === cartItemId ? { ...item, quantity: newQuantity } : item
@@ -56,7 +70,6 @@ export default function ShoppingCart() {
     };
 
     useEffect(() => {
-        // Recalculate subtotal whenever cartItems change
         const newSubTotal = cartItems.reduce(
             (total, cartItem) => total + cartItem.price * cartItem.quantity, 0
         );
@@ -79,7 +92,10 @@ export default function ShoppingCart() {
                                         <span className="visually-hidden">Loading...</span>
                                     </div>
                                 ) : cartItems.length === 0 ? (
-                                    <p>There are no items in your cart.</p>
+                                    <>
+                                        <p>There are no items in your cart.</p>
+                                        <img src={Cart} alt="shopping cart" className="shopping-cart-icon"/>
+                                    </>
                                 ) :(
                                     cartItems && cartItems.map((cartItem, index) => (
                                         <CartItem
