@@ -8,13 +8,6 @@
     overflow: hidden;
 }
 
-.user-update-btn {
-    position: relative;
-    right: 0.5vw;
-    top: 1vw;
-    font-size: 1vw;
-}
-
 .product-delete-btn {
     position: relative;
     right: 0.5vw;

@@ -150,11 +150,13 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
             </td>
             <td className="tr-col user-info-txt">{roles}</td>
             <td className="tr-col user-info-txt">{created}</td>
-            {isEditing ? (
-                <button className="btn btn-primary update-btn" onClick={updateUser}>UPDATE</button>
-            ) : (
-                <button className="btn btn-primary update-btn" onClick={toggleEditMode}>EDIT</button>
-            )}
+            <td className="tr-col user-info-txt">
+                {isEditing ? (
+                    <button className="btn btn-primary update-btn" onClick={updateUser}>UPDATE</button>
+                ) : (
+                    <button className="btn btn-primary update-btn" onClick={toggleEditMode}>EDIT</button>
+                )}
+            </td>
             <td className="tr-col user-info-txt"><button className="btn btn-danger product-delete-btn" onClick={deleteUser}>DELETE</button></td>
         </tr>
     );
