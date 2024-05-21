@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './Header.css';
 import * as bootstrap from 'bootstrap';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,7 +31,7 @@ export default function Header() {
     function handleSignIn(e) {
         e.preventDefault();
         const user = {username, password}
-        fetch("http://localhost:8080/nexusHub/login", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)
