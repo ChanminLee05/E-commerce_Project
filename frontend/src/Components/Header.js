@@ -60,7 +60,7 @@ export default function Header() {
 
                     setIsLoggedIn(false);
 
-                    window.location.href = '/main';
+                    window.location.href = '/';
 
                     toast.warn('Session Expired. Please login again.', {
                         position: "top-center",
@@ -92,7 +92,7 @@ export default function Header() {
 
         setIsLoggedIn(false);
 
-        window.location.href = '/main';
+        window.location.href = '/';
 
         toast.success("Logout Successful", {
                 position: "top-center",
