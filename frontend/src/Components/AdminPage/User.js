@@ -140,7 +140,7 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
                     <input
                         type="text"
                         className="form-control"
-                        name="password"
+                        name="phone_number"
                         value={formData.phone_number}
                         onChange={userChange}
                     />
