@@ -106,7 +106,7 @@ export default function Header() {
     return(
         <div className="header">
             <div className="logo-container">
-                <Link to="/main" className="logo-link">
+                <Link to="/" className="logo-link">
                     <h2 className="logo-txt">NexusHub</h2>
                 </Link>
             </div>
