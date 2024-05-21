@@ -192,7 +192,6 @@ const ProductItem = ({productId, productName, categoryId, categoryName, brand, d
                         name="productName"
                         value={formData.productName}
                         onChange={handleChange}
-                        multiple
                     />
                 ) : (
                     productName

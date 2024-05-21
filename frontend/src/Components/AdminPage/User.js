@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {toast, ToastContainer} from "react-toastify";
 import bcrypt from "bcryptjs";
 import "./User.css";
 
 const User = ({user_id, username, password, email, phone_number, roles, created}) => {
-    const [isAccordionOpened, setIsAccordionOpened] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const [formData, setFormData] = useState({
         user_id: '',
@@ -13,10 +12,6 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
         email: '',
         phone_number: ''
     });
-
-    const toggleAccordions = () => {
-        setIsAccordionOpened(!isAccordionOpened);
-    };
 
     function userChange(e) {
         const { name, value } = e.target;
@@ -34,78 +29,51 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
             formDataToSend.append(key, formData[key]);
         }
 
-        fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/update/${user_id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json" // Set the content type to JSON
-            },
-            body: JSON.stringify(formData)
-        })
-            .then((response) => {
-                if (response.ok) {
-                    console.log('User updated Successfully');
-                    setFormData({
-                        userId: '',
-                        username: '',
-                        password: '',
-                        email: '',
-                        phone_number: ''
-                    });
-                    response.json().then(data => {
-                        toast.success('User updated Successfully', {
-                            position: "top-center",
-                            draggable: true,
-                            hideProgressBar: true
-                        });
+        const updateConfirmMessage = window.confirm("Are you sure you want to update this user?");
+        if (updateConfirmMessage) {
+            fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/update/${user_id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json" // Set the content type to JSON
+                },
+                body: JSON.stringify(formData)
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        window.alert('Product updated Successfully');
 
                         setTimeout(() => {
                             window.location.reload();
                         }, 2000)
-                    })
-                } else {
-                    console.error('Failed to update user');
-                    toast.warn('Failed to update user', {
-                            position: "top-center",
-                            draggable: true,
-                            hideProgressBar: true
-                        }
-                    );
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+
+                    } else {
+                        window.alert('Failed to update product');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
     }
 
         function deleteUser(e) {
             e.preventDefault();
 
-            if (window.confirm("Are you sure you want to delete this user?")) {
+            const deleteConfirmMessage = window.confirm("Are you sure you want to delete this user?");
+            if (deleteConfirmMessage) {
                 fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/delete/${user_id}`, {
                     method: "DELETE"
                 })
                     .then((response) => {
                         if (response.ok) {
-                            console.log('User deleted Successfully');
-
-                            toast.success('User deleted Successfully', {
-                                position: "top-center",
-                                draggable: true,
-                                hideProgressBar: true
-                            });
+                            window.alert('User deleted Successfully');
 
                             setTimeout(() => {
                                 window.location.reload();
                             }, 2000)
 
                         } else {
-                            console.error('Failed to delete user');
-                            toast.warn('Failed to delete user', {
-                                    position: "top-center",
-                                    draggable: true,
-                                    hideProgressBar: true
-                                }
-                            );
+                            window.alert('Failed to delete user');
                         }
                     })
                     .catch((error) => {
@@ -114,57 +82,81 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
             }
         }
 
+    const toggleEditMode = () => {
+        setIsEditing(!isEditing);
+        setFormData({
+            user_id,
+            username,
+            password,
+            email,
+            phone_number
+        });
+    };
+
     return (
-        <>
-            <tr>
-                <td className="tr-col user-info-txt">{user_id}</td>
-                <td className="tr-col user-info-txt">{username}</td>
-                <td className="tr-col user-info-txt user-password">{password}</td>
-                <td className="tr-col user-info-txt">{email}</td>
-                <td className="tr-col user-info-txt">{phone_number}</td>
-                <td className="tr-col user-info-txt">{roles}</td>
-                <td className="tr-col user-info-txt">{created}</td>
-                <td className="tr-col user-info-txt"><button className="btn btn-primary user-update-btn" onClick={toggleAccordions}>UPDATE</button></td>
-                <td className="tr-col user-info-txt"><button className="btn btn-danger product-delete-btn" onClick={deleteUser}>DELETE</button></td>
-            </tr>
-            {isAccordionOpened && (
-                <tr>
-                    <td colSpan="7">
-                        <form className="add-product-form" onSubmit={updateUser}>
-                            <h1>UPDATE USERS</h1>
-                            <label>
-                                <h4>USER NAME</h4>
-                            </label>
-                            <div className="input-group mb-3 input-box">
-                                <input type="text" className="form-control" name="username"  value={formData.username} onChange={userChange} required={true}></input>
-                            </div>
-                            <label>
-                                <h4>USER PASSWORD</h4>
-                            </label>
-                            <div className="input-group mb-3 input-box">
-                                <div className="input-group mb-3 input-box">
-                                    <input type="text" className="form-control" name="password"  value={formData.password} onChange={userChange} required={true}></input>
-                                </div>
-                            </div>
-                            <label>
-                                <h4 className="">EMAIL</h4>
-                            </label>
-                            <div className="input-group mb-3 input-box">
-                                <input type="text" className="form-control" name="email" value={formData.email} onChange={userChange} required={true}></input>
-                            </div>
-                            <label>
-                                <h4 className="">PHONE NUMBER</h4>
-                            </label>
-                            <div className="input-group mb-3 input-box">
-                                <input type="text" className="form-control" name="phone_number" value={formData.phone_number} onChange={userChange} required={true}></input>
-                            </div>
-                            <button type="submit" className="btn btn-primary">Save User</button>
-                        </form>
-                    </td>
-                </tr>
+        <tr>
+            <td className="tr-col user-info-txt">{user_id}</td>
+            <td className="tr-col user-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="username"
+                        value={formData.username}
+                        onChange={userChange}
+                    />
+                ) : (
+                    username
+                )}
+            </td>
+            <td className="tr-col user-info-txt user-password">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="password"
+                        value={formData.password}
+                        onChange={userChange}
+                    />
+                ) : (
+                    password
+                )}
+            </td>
+            <td className="tr-col user-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="email"
+                        value={formData.email}
+                        onChange={userChange}
+                    />
+                ) : (
+                    email
+                )}
+            </td>
+            <td className="tr-col user-info-txt">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="password"
+                        value={formData.phone_number}
+                        onChange={userChange}
+                    />
+                ) : (
+                    phone_number
+                )}
+            </td>
+            <td className="tr-col user-info-txt">{roles}</td>
+            <td className="tr-col user-info-txt">{created}</td>
+            {isEditing ? (
+                <button className="btn btn-primary update-btn" onClick={updateUser}>UPDATE</button>
+            ) : (
+                <button className="btn btn-primary update-btn" onClick={toggleEditMode}>EDIT</button>
             )}
-            <ToastContainer />
-        </>
+            <td className="tr-col user-info-txt"><button className="btn btn-danger product-delete-btn" onClick={deleteUser}>DELETE</button></td>
+        </tr>
     );
 };
 
