@@ -20,7 +20,7 @@ const CartItem = ({ cartId, cartItemId, productName, brand, images, price, onDel
             const deleteItem = window.confirm("Are you sure you want to delete the item from your cart?");
             if (!deleteItem) return;
 
-            const response = await fetch(`http://localhost:8080/nexusHub/cart-item/delete?cartId=${cartId}&cartItemId=${cartItemId}`, {
+            const response = await fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/cart-item/delete?cartId=${cartId}&cartItemId=${cartItemId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

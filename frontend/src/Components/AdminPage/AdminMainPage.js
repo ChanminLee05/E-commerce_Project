@@ -17,7 +17,7 @@ function AdminMainPage() {
     useEffect(() => {
         const fetchTotalData = async () => {
             try {
-                const totalProductNumber = await fetch('http://localhost:8080/nexusHub/product/totalProducts');
+                const totalProductNumber = await fetch('https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product/totalProducts');
                 if (totalProductNumber.ok) {
                     const productsData = await totalProductNumber.json();
                     setTotalProducts(productsData);
@@ -25,7 +25,7 @@ function AdminMainPage() {
                     console.error('Failed to fetch total products');
                 }
 
-                const totalUserNumber = await fetch('http://localhost:8080/nexusHub/user/totalUsers');
+                const totalUserNumber = await fetch('https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/user/totalUsers');
                 if (totalUserNumber.ok) {
                     const usersData = await totalUserNumber.json();
                     setTotalUsers(usersData);

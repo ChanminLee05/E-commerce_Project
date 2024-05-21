@@ -9,7 +9,7 @@ const ItemListPage = ({ categoryId, initialItemCount, loadMoreIncrement }) => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/nexusHub/product/category/${categoryId}`);
+                const response = await fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product/category/${categoryId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch items");
                 }

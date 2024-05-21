@@ -13,7 +13,7 @@ const ProductControlPage = () => {
     }, []);
 
     const fetchProducts = () => {
-        fetch("http://localhost:8080/nexusHub/product", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product", {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json'

@@ -119,7 +119,7 @@ const ProductItem = ({productId, productName, categoryId, categoryName, brand, d
         const updateConfirmMessage = window.confirm("Are you sure you want to update this product?");
         if (updateConfirmMessage) {
             try {
-                const response = await axios.put(`http://localhost:8080/nexusHub/product/update/${productId}`, formDataToSend, {
+                const response = await axios.put(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product/update/${productId}`, formDataToSend, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -158,7 +158,7 @@ const ProductItem = ({productId, productName, categoryId, categoryName, brand, d
         e.preventDefault();
         const deleteConfirmMessage = window.confirm("Are you sure you want to delete this product?");
         if (deleteConfirmMessage) {
-            fetch(`http://localhost:8080/nexusHub/product/delete/${productId}`, {
+            fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product/delete/${productId}`, {
                 method: "DELETE"
             })
                 .then((response) => {

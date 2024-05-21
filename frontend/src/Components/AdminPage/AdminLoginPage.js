@@ -12,7 +12,7 @@ const AdminLoginPage = () => {
     function handleSignIn(e) {
         e.preventDefault();
         const user = {username, password}
-        fetch("http://localhost:8080/nexusHub/admin/login", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)

@@ -12,7 +12,7 @@ const UserControlPage = () => {
     }, []);
 
     const fetchUsers = () => {
-        fetch("http://localhost:8080/nexusHub/admin/user", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/user", {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

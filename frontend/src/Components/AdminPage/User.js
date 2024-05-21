@@ -34,7 +34,7 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
             formDataToSend.append(key, formData[key]);
         }
 
-        fetch(`http://localhost:8080/nexusHub/admin/update/${user_id}`, {
+        fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/update/${user_id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json" // Set the content type to JSON
@@ -81,7 +81,7 @@ const User = ({user_id, username, password, email, phone_number, roles, created}
             e.preventDefault();
 
             if (window.confirm("Are you sure you want to delete this user?")) {
-                fetch(`http://localhost:8080/nexusHub/admin/delete/${user_id}`, {
+                fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/admin/delete/${user_id}`, {
                     method: "DELETE"
                 })
                     .then((response) => {
