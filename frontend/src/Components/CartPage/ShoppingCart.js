@@ -27,7 +27,7 @@ export default function ShoppingCart() {
 
         if (userId) {
             try {
-                const response = await fetch(`http://localhost:8080/nexusHub/cart/${userId}`);
+                const response = await fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/cart/${userId}`);
                 if (response.ok) {
                     const data = await response.json();
                     setCartItems(data.cartItemList);

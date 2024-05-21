@@ -44,7 +44,7 @@ const Item = ({ productId, brand, productName, imageUrl, description, price, pho
 
         const authToken = localStorage.getItem('token');
 
-        fetch('http://localhost:8080/nexusHub/cart-item/add', {
+        fetch('https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/cart-item/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

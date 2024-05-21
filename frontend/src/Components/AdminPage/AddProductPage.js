@@ -75,7 +75,7 @@ const AddProductPage = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/nexusHub/product/add', formDataToSend, {
+            const response = await axios.post('https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/product/add', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
