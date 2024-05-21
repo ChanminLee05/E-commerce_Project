@@ -61,9 +61,9 @@ const ProductControlPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map((product, index) => (
+                            {products.map(product => (
                                 <ProductItem
-                                    key={index}
+                                    key={product.productId} // Use productId as key if it's unique
                                     productId={product.productId}
                                     productName={product.productName}
                                     brand={product.brand}
