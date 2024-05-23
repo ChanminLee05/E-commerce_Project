@@ -44,7 +44,7 @@ const RegisterPage = () => {
 
         const registerUser = {username, password, email, phone_number};
         console.log(registerUser);
-        fetch("http://localhost:8080/nexusHub/register", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/register", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(registerUser)

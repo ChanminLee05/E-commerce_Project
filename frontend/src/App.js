@@ -13,13 +13,15 @@ import AddProductPage from "./Components/AdminPage/AddProductPage";
 import AdminLoginPage from "./Components/AdminPage/AdminLoginPage";
 import UserControlPage from "./Components/AdminPage/UserControlPage";
 import ShoppingCart from "./Components/CartPage/ShoppingCart";
+import AdminMainPage from "./Components/AdminPage/AdminMainPage";
+import PageNotFound from "./Components/PageNotFound";
 
 function App() {
   return (
     <Router>
         <Routes>
             <Route index element={<MainPage/>} />
-            <Route path="/main" element={<MainPage/>} />
+            <Route path="/" element={<MainPage/>} />
             <Route path="/tech-support" element={<TechSupport/>} />
             <Route path="/cart" element={<ShoppingCart/>} />
             <Route path="/register" element={<RegisterPage/>} />
@@ -31,8 +33,9 @@ function App() {
             <Route path="/admin/product-control" element={<ProductControlPage/>} />
             <Route path="/admin/add-product" element={<AddProductPage/>} />
             <Route path="/admin/login" element={<AdminLoginPage/>} />
+            <Route path="/admin/main" element={<AdminMainPage/>} />
             <Route path="/admin/user-control" element={<UserControlPage/>} />
-
+            <Route path="*" element={<PageNotFound/>} />
         </Routes>
     </Router>
   );

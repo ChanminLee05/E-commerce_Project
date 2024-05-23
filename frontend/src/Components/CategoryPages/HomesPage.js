@@ -3,13 +3,6 @@ import Header from "../Header";
 import ItemListPage from "./ItemListPage";
 
 const HomesPage = ({ handleSignIn, handleLogOut }) => {
-    const homesApiUrl = [
-        "https://api.escuelajs.co/api/v1/products/?categoryId=3",
-        "https://dummyjson.com/products/category/lighting",
-        "https://dummyjson.com/products/category/home-decoration",
-        "https://dummyjson.com/products/category/furniture"
-
-    ];
 
     return (
         <>
@@ -17,7 +10,7 @@ const HomesPage = ({ handleSignIn, handleLogOut }) => {
             <div className="fashion-page">
                 <div className="filter-section"></div>
                 <ItemListPage
-                    apiUrl={homesApiUrl}
+                    categoryId={3}
                     initialItemCount={8}
                     loadMoreIncrement={20}
                 />

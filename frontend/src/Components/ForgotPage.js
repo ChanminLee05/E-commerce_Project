@@ -31,7 +31,7 @@ const ForgotPage = () => {
         const findUser = {email};
         console.log(findUser);
 
-        fetch(`http://localhost:8080/chatbot/user/find?email=${encodeURIComponent(email)}`, {
+        fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/user/find?email=${encodeURIComponent(email)}`, {
             method: "GET",
             headers: {"Content-Type": "application/json"}
         })
@@ -72,7 +72,7 @@ const ForgotPage = () => {
             return;
         }
 
-        fetch(`http://localhost:8080/chatbot/user/reset-password?email=${encodeURIComponent(email)}`, {
+        fetch(`https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/user/reset-password?email=${encodeURIComponent(email)}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"}
         })

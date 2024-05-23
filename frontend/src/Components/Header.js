@@ -14,12 +14,10 @@ export default function Header() {
     const [rememberMe, setRememberMe] = useState(false);
 
     useEffect(() => {
-        // Check if user is logged in by checking localStorage
-        const token = localStorage.getItem('token'); // Assuming you store token upon successful login
+        const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
 
         const handleBeforeUnload = (event) => {
-            // Clear token from localStorage upon leaving the page or closing the browser window
             localStorage.removeItem('token');
         };
 
@@ -33,18 +31,16 @@ export default function Header() {
     function handleSignIn(e) {
         e.preventDefault();
         const user = {username, password}
-        console.log(user);
-        fetch("http://localhost:8080/nexusHub/login", {
+        fetch("https://nexushub-backend-a8e67f946270.herokuapp.com/nexusHub/login", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(user)
         }).then((response) => {
             if (response.ok) {
-                console.log('Login Successful');
                 response.json().then(data => {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
                     setIsLoggedIn(true);
-                    // Save username to localStorage if "Remember Me" is checked
                     if (rememberMe) {
                         localStorage.setItem('rememberedUsername', username);
                     } else {
@@ -61,7 +57,11 @@ export default function Header() {
                 // Schedule token removal after 1 hour
                 setTimeout(() => {
                     localStorage.removeItem('token');
+
                     setIsLoggedIn(false);
+
+                    window.location.href = '/';
+
                     toast.warn('Session Expired. Please login again.', {
                         position: "top-center",
                         draggable: true,
@@ -86,23 +86,27 @@ export default function Header() {
     }
 
     function handleLogOut() {
-        // Clear token from localStorage upon logout
+
         localStorage.removeItem('token');
+        localStorage.removeItem('userId');
 
         setIsLoggedIn(false);
+
+        window.location.href = '/';
+
         toast.success("Logout Successful", {
-            position: "top-center",
-            draggable: true,
-            hideProgressBar: true
+                position: "top-center",
+                draggable: true,
+                hideProgressBar: true
             }
-            )
+        )
     }
 
 
     return(
         <div className="header">
             <div className="logo-container">
-                <Link to="/main" className="logo-link">
+                <Link to="/" className="logo-link">
                     <h2 className="logo-txt">NexusHub</h2>
                 </Link>
             </div>
@@ -126,13 +130,13 @@ export default function Header() {
                                 isLoggedIn ? 'd-none' : ''
                             }`}>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleDropdownFormUsername" className="form-label">User Name</label>
-                                    <input type="text" className="form-control" id="exampleDropdownFormUsername" placeholder="User Name"
+                                    <label htmlFor="exampleDropdownFormUsername" className="form-label header-form-label">User Name</label>
+                                    <input type="text" className="form-control header-form-input" id="exampleDropdownFormUsername" placeholder="User Name"
                                            value={username} onChange={(e) => setUsername(e.target.value)}/>
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="exampleDropdownFormPassword2" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="exampleDropdownFormPassword2" placeholder="Password"
+                                    <label htmlFor="exampleDropdownFormPassword2" className="form-label header-form-label">Password</label>
+                                    <input type="password" className="form-control header-form-input" id="exampleDropdownFormPassword2" placeholder="Password"
                                             value={password} onChange={(e) => setPassword(e.target.value)}/>
                                 </div>
                                 <div className="mb-3">
@@ -140,14 +144,17 @@ export default function Header() {
                                         <input type="checkbox" className="form-check-input" id="dropdownCheck2"
                                                checked={rememberMe}
                                                onChange={(e) => setRememberMe(e.target.checked)}/>
-                                            <label className="form-check-label" htmlFor="dropdownCheck2">
+                                            <label className="form-check-label header-form-input" htmlFor="dropdownCheck2">
                                                 Remember me
                                             </label>
                                         <Link to="/find" className="find-link"><p className="find-txt">Forgot your username or password?</p></Link>
                                     </div>
                                 </div>
-                                <button type="submit" className="btn btn-primary" onClick={handleSignIn}>Sign in</button>
-                                <Link to="/register" className="register-link"><button className="btn btn-primary">Sign Up</button></Link>
+                                <div className="header-form-btn-container">
+                                    <button type="submit" className="btn btn-primary header-form-btn" onClick={handleSignIn}>Sign in</button>
+                                    <Link to="/register" className="register-link"><button className="btn btn-primary header-form-btn">Sign Up</button></Link>
+                                    <Link to="/admin/login" className="register-link"><button className="btn btn-primary header-form-btn">Admin Login</button></Link>
+                                </div>
                             </form>
                         </div>
                     </li>

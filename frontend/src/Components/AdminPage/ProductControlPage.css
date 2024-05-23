@@ -1,15 +1,5 @@
-.admin-page {
-
-}
-
-.admin-form {
-    margin: 8vw 10vw 5vw 10vw;
-    width: 80vw;
-}
-
-.search-container {
-    font-size: 1vw;
-    margin: 5vw;
+.add-product-btn {
+    margin: 1vw;
 }
 
 .goToAddProduct {
@@ -18,7 +8,6 @@
     font-size: 1vw;
 }
 
-.th-col {
-    font-size: 1.2vw;
-
+.bi-pencil-square {
+    margin-right: 0.5vw;
 }
