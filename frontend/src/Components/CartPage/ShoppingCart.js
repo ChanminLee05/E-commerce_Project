@@ -76,6 +76,10 @@ export default function ShoppingCart() {
         setSubTotal(newSubTotal);
     }, [cartItems]);
 
+    function updateNotice() {
+        window.alert("There will be further update for this feature")
+    }
+
     return(
         <>
             <Header/>
@@ -123,7 +127,7 @@ export default function ShoppingCart() {
                         <h4 className="total-amount">${subTotal.toFixed(2)}</h4>
                     </div>
                     <div className="proceed-container">
-                        <button className="btn btn-primary proceed-btn">
+                        <button className="btn btn-primary proceed-btn" onClick={updateNotice}>
                             Proceed to Checkout
                         </button>
                     </div>
